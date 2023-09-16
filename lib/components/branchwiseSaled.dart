@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../utiles/functionSupporter.dart';
 import '../utiles/sizer.dart';
 import '../utiles/textstyles.dart';
 
@@ -43,7 +44,8 @@ class BranchWiseSales extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                child: tx500(BranchData["branch"], color: Colors.black),
+                child: tx500(StringtoFormate(BranchData["branch"]),
+                    color: Colors.black),
               ),
             ],
           ),
@@ -57,15 +59,15 @@ class BranchWiseSales extends StatelessWidget {
             children: [
               tx700(
                   (isSale)
-                      ? "${Amountdata["totalSales"]}"
-                      : "${Amountdata["totalProfit"]}",
+                      ? "${ToFixed(Amountdata["totalSales"])}"
+                      : "${ToFixed(Amountdata["totalProfit"])}",
                   color: Colors.black,
                   size: 18),
               Expanded(child: Container()),
               tx700(
                   (isSale)
-                      ? "${Amountdata["salesPercentage"]}"
-                      : "${Amountdata["profitPercentage"]}",
+                      ? "${ToFixed(Amountdata["salesPercentage"])}"
+                      : "${ToFixed(Amountdata["profitPercentage"])}",
                   size: 18,
                   color: color)
             ],

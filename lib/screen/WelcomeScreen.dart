@@ -68,6 +68,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             Container(
                               width: 100,
                               height: 30,
+                              margin: EdgeInsets.only(top: 4),
                               child: Stack(
                                 children: [
                                   Positioned(
@@ -77,7 +78,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       child: Icon(
                                         Icons.arrow_forward_ios_sharp,
                                         color: Colors.white54,
-                                        size: 25,
+                                        size: 20,
                                       ),
                                     ),
                                   ),
@@ -88,7 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                       child: Icon(
                                         Icons.arrow_forward_ios_sharp,
                                         color: Colors.white54.withOpacity(.2),
-                                        size: 25,
+                                        size: 20,
                                       ),
                                     ),
                                   )
@@ -101,15 +102,21 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     Container(
                       width: 309,
                       height: 1,
-                      color: Colors.white.withOpacity(.4),
+                      color: Colors.white.withOpacity(.6),
                     ),
                     height(30),
                     Container(
                       alignment: Alignment.centerLeft,
                       width: double.infinity,
-                      padding: const EdgeInsets.only(left: 33, right: 120),
-                      child: tx500("Just one step away to view your business.",
+                      padding: const EdgeInsets.only(left: 33, right: 100),
+                      child: tx500("Just one step away to view your",
                           color: Colors.white, size: 16),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(left: 33, right: 120),
+                      child: tx700("business.", color: Colors.white, size: 16),
                     ),
                     height(70),
                     InkWell(
@@ -124,7 +131,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           radius: 10),
                     ),
                     height(20),
-                    tx500("App ver : 1.0.0", color: Colors.white),
+                    tx500("Ver : 1.00.1.00", color: Colors.white),
                     height(70),
                     //tx600("Service ver : 1.0.0", color: Colors.white),
                     height(4),

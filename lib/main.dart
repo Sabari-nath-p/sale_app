@@ -52,6 +52,7 @@ class seematti extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // home: WelcomeScreen(),
       home: (isok == 1)
           ? SplashScreen()
           : (isok == 2)

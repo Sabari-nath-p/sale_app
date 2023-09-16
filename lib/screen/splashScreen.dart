@@ -39,13 +39,16 @@ class _SplashScreenState extends State<SplashScreen> {
   String selectedBranch = "";
 
   loadCompany() async {
+    print(userid);
     final Respones = await http.post(Uri.parse("$baseurl/v1/company/dropdown"),
         body: json.encode({"userID": "$userid"}),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         });
-
+    print("Working");
+    print(Respones.body);
+    print("Working 1");
     if (Respones.statusCode == 200) {
       var js = json.decode(Respones.body);
       if (js["success"]) {
@@ -61,13 +64,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   loadBranch(int id) async {
+    print(id);
     final Respones = await http.post(Uri.parse("$baseurl/v1/branch/dropdown"),
         body: json.encode({"userID": "$userid", "companyID": id}),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         });
-
+    print(Respones.body);
     if (Respones.statusCode == 200) {
       var js = json.decode(Respones.body);
       if (js["success"] && js["success"] != null) {
@@ -101,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen> {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token'
         });
-
+    print(Response.body);
     //noprint(Response.statusCode);
     //noprint(Response.body);
     if (Response.statusCode == 200) {

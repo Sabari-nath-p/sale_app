@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../utiles/colors.dart';
+import '../utiles/functionSupporter.dart';
 import '../utiles/textstyles.dart';
 
 class SalesGraph extends StatefulWidget {
@@ -78,8 +79,9 @@ class _SalesGraphState extends State<SalesGraph> {
                             ? ""
                             : (widget.salesGraphData.length >
                                     (value - .5).toInt())
-                                ? widget.salesGraphData[(value - .5).toInt()]
-                                    ["item"]
+                                ? StringtoFormate(
+                                    widget.salesGraphData[(value - .5).toInt()]
+                                        ["item"])
                                 : "",
                         size: 12),
                     interval: .5,

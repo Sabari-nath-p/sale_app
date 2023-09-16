@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -93,6 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           width: 100,
                           height: 30,
+                          margin: EdgeInsets.only(top: 4),
                           child: Stack(
                             children: [
                               Positioned(
@@ -102,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Icon(
                                     Icons.arrow_forward_ios_sharp,
                                     color: Colors.white54,
-                                    size: 25,
+                                    size: 20,
                                   ),
                                 ),
                               ),
@@ -113,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Icon(
                                     Icons.arrow_forward_ios_sharp,
                                     color: Colors.white54.withOpacity(.2),
-                                    size: 25,
+                                    size: 20,
                                   ),
                                 ),
                               )
@@ -151,11 +153,17 @@ class _LoginScreenState extends State<LoginScreen> {
                               height(40),
                               tx700("Welcome", size: 22, color: Colors.black),
                               height(11),
-                              tx400("Login to your account to view your ",
-                                  color: Colors.black),
-                              tx600("business.", color: Colors.black),
+                              Wrap(
+                                children: [
+                                  tx400("Login to your account to view your ",
+                                      size: 14, color: Colors.black),
+                                  tx600("business.",
+                                      color: Colors.black, size: 14),
+                                ],
+                              ),
                               height(50),
-                              tx400("Mobile / Email", size: 14),
+                              tx400("Mobile / Email",
+                                  size: 14, color: Color(0xff323030)),
                               height(11),
                               Container(
                                 height: 50,
@@ -169,8 +177,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   controller: emailController,
                                   focusNode: emailFocuse,
                                   onChanged: (value) {
-                                    if (emailController.text.length > 7 &&
-                                        passwordController.text.length > 8)
+                                    if (emailController.text.length > 2 &&
+                                        passwordController.text.length > 2)
                                       setState(() {
                                         isReady = true;
                                       });
@@ -187,7 +195,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               height(17),
-                              tx400("Password", size: 14),
+                              tx400("Password",
+                                  size: 14, color: Color(0xff323030)),
                               height(11),
                               Container(
                                 height: 50,
@@ -201,8 +210,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   obscureText: !isPassVisible,
                                   controller: passwordController,
                                   onChanged: (value) {
-                                    if (emailController.text.length > 7 &&
-                                        passwordController.text.length > 5)
+                                    if (emailController.text.length > 2 &&
+                                        passwordController.text.length > 2)
                                       setState(() {
                                         isReady = true;
                                       });
@@ -259,7 +268,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       isRemember = value;
                                     });
                                   }),
-                              tx500("Remember me", size: 12),
+                              tx500("Remember me",
+                                  size: 12, color: Color(0xff323030)),
                               Expanded(child: Container()),
                               InkWell(
                                   onTap: () {
@@ -272,13 +282,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                     } else {
                                       Fluttertoast.showToast(
                                           msg:
-                                              "please enter email id  for reset password");
-                                      FocusScope.of(context)
-                                          .requestFocus(emailFocuse);
+                                              "Please enter email id for reset password");
+                                      // FocusScope.of(context)
+                                      //     .requestFocus(emailFocuse);
                                       // emailController.
                                     }
                                   },
-                                  child: tx500("Forgot Password ?", size: 12)),
+                                  child: tx500("Forgot Password ?",
+                                      size: 12, color: Color(0xff323030))),
                               width(10)
                             ],
                           ),
@@ -302,67 +313,79 @@ class _LoginScreenState extends State<LoginScreen> {
                               setState(() {
                                 isLoading = true;
                               });
-                              final Response =
-                                  await http.post(Uri.parse("$baseurl/login"),
-                                      body: json.encode({
-                                        "username": emailController.text.trim(),
-                                        "password":
-                                            passwordController.text.trim()
-                                      }),
-                                      headers: {
-                                    'Content-Type': 'application/json',
-                                    "AppID": "S01",
-                                  });
+                              try {
+                                final Response =
+                                    await http.post(Uri.parse("$baseurl/login"),
+                                        body: json.encode({
+                                          "username":
+                                              emailController.text.trim(),
+                                          "password":
+                                              passwordController.text.trim()
+                                        }),
+                                        headers: {
+                                      'Content-Type': 'application/json',
+                                      "AppID": "S01",
+                                    });
 
-                              //noprint(Response.body);
-                              //noprint(Response.statusCode);
-                              if (Response.statusCode == 200) {
-                                var res = json.decode(Response.body);
+                                //noprint(Response.body);
+                                //noprint(Response.statusCode);
 
-                                if (res["success"] && res["success"] != null) {
-                                  //noprint(res);
-                                  print(Response.body);
-                                  SharedPreferences pref =
-                                      await SharedPreferences.getInstance();
-                                  pref.setString("USER", Response.body);
-                                  pref.setString(
-                                      "TOKEN", res["data"]["authToken"]);
-                                  pref.setString(
-                                      "USERID", res["data"]["userID"]);
-                                  userid = res["data"]["userID"];
-                                  token = res["data"]["authToken"];
-                                  final pp = await http.post(
-                                      Uri.parse(
-                                          "$baseurl/v1/profile/getuserprofile"),
-                                      body: json.encode({"userID": "$userid"}),
-                                      headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': 'Bearer $token'
-                                      });
+                                if (Response.statusCode == 200) {
+                                  var res = json.decode(Response.body);
 
-                                  if (pp.statusCode == 200) {
-                                    var js = json.decode(pp.body);
-                                    UserData = js["data"][0];
-                                  }
-                                  if (isRemember)
-                                    pref.setString("LOGIN", "IN");
-                                  else
-                                    pref.setString("LOGIN", "SKIP");
+                                  if (res["success"] &&
+                                      res["success"] != null) {
+                                    //noprint(res);
+                                    print(Response.body);
+                                    SharedPreferences pref =
+                                        await SharedPreferences.getInstance();
+                                    pref.setString("USER", Response.body);
+                                    pref.setString(
+                                        "TOKEN", res["data"]["authToken"]);
+                                    pref.setString(
+                                        "USERID", res["data"]["userID"]);
+                                    userid = res["data"]["userID"];
+                                    token = res["data"]["authToken"];
+                                    final pp = await http.post(
+                                        Uri.parse(
+                                            "$baseurl/v1/profile/getuserprofile"),
+                                        body: json.encode({"userID": "$userid"}),
+                                        headers: {
+                                          'Content-Type': 'application/json',
+                                          'Authorization': 'Bearer $token'
+                                        });
 
-                                  while (Navigator.canPop(context))
+                                    if (pp.statusCode == 200) {
+                                      var js = json.decode(pp.body);
+                                      UserData = js["data"][0];
+                                    }
+                                    if (isRemember)
+                                      pref.setString("LOGIN", "IN");
+                                    else
+                                      pref.setString("LOGIN", "SKIP");
+
+                                    while (Navigator.canPop(context))
+                                      Navigator.pop(context);
                                     Navigator.pop(context);
-                                  Navigator.pop(context);
-                                  ScreenChanger(context, SplashScreen());
+                                    ScreenChanger(context, SplashScreen());
+                                  } else {
+                                    //noprint("working");
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    Fluttertoast.showToast(
+                                        msg: "Incorrect Credentials");
+                                  }
                                 } else {
-                                  //noprint("working");
+                                  Fluttertoast.showToast(msg: "Bad Request");
                                   setState(() {
                                     isLoading = false;
                                   });
-                                  Fluttertoast.showToast(
-                                      msg: "Incorrect Credentials");
                                 }
-                              } else {
-                                Fluttertoast.showToast(msg: "Bad Request");
+                              } on SocketException catch (_) {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        "Please Connect to internet and retry");
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -389,9 +412,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         height(15),
                         Center(
-                            child: tx400("Ver : 1.0.0",
+                            child: tx400("Ver : 1.00.1.00",
                                 size: 14, textAlign: TextAlign.center)),
-                        height(120),
+                        height(140),
                         Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.only(bottom: 30),

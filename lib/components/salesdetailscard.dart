@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seematti/utiles/functionSupporter.dart';
 import 'package:seematti/utiles/sizer.dart';
 import 'package:seematti/utiles/textstyles.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
@@ -19,7 +20,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
     double precentage = 0;
     precentage = (widget.data["netSalePerc"] * 3.24);
     return AnimatedContainer(
-      height: (isExpanded) ? 220 : 120,
+      height: (isExpanded) ? 220 : 130,
       curve: Curves.easeIn,
       duration: const Duration(milliseconds: 200),
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
@@ -39,7 +40,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
           Row(
             children: [
               Expanded(
-                child: tx500("${widget.data["item"]}",
+                child: tx500(StringtoFormate("${widget.data["item"]}"),
                     color: Colors.black, size: 14),
               ),
               InkWell(
@@ -76,7 +77,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
           ),
           Row(
             children: [
-              tx700("${widget.data["netSaleAmount"]}",
+              tx700("${ToFixed(widget.data["netSaleAmount"])}",
                   color: Colors.black, size: 18),
               Expanded(child: Container()),
               tx700("${widget.data["netSalePerc"]}%",
@@ -98,55 +99,62 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                     borderRadius: BorderRadius.circular(10),
                     color: widget.color),
               )),
+          height(10),
           Expanded(
-              child: Stack(
-            fit: StackFit.loose,
-            children: [
-              Positioned(
-                  left: 0,
-                  top: 14,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      tx600("${widget.data["discountAmount"]}",
-                          size: 16, color: Colors.black),
-                      tx400("Discount Amount", size: 10, color: Colors.black)
-                    ],
-                  )),
-              Positioned(
-                  right: 0,
-                  top: 14,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      tx600("${widget.data["taxAmount"]}",
-                          size: 16, color: Colors.black),
-                      tx400("Tax Amount", size: 10, color: Colors.black)
-                    ],
-                  )),
-              Positioned(
-                  left: 0,
-                  bottom: 0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      tx600("${widget.data["returnAmount"]}",
-                          size: 16, color: Colors.black),
-                      tx400("Return Amount", size: 10, color: Colors.black)
-                    ],
-                  )),
-              Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      tx600("${widget.data["totalPieces"]}",
-                          size: 16, color: Colors.black),
-                      tx400("Total Pieces", size: 10, color: Colors.black)
-                    ],
-                  ))
-            ],
+              child: SingleChildScrollView(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        tx600("${ToFixed(widget.data["discountAmount"])}",
+                            size: 16, color: Colors.black),
+                        tx400("Discount Amount", size: 10, color: Colors.black)
+                      ],
+                    ),
+                    height(15),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        tx600("${ToFixed(widget.data["taxAmount"])}",
+                            size: 16, color: Colors.black),
+                        tx400("Tax Amount", size: 10, color: Colors.black)
+                      ],
+                    ),
+                  ],
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (isExpanded)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          tx600("${ToFixed(widget.data["returnAmount"])}",
+                              size: 16, color: Colors.black),
+                          tx400("Return Amount", size: 10, color: Colors.black)
+                        ],
+                      ),
+                    height(15),
+                    if (isExpanded)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          tx600("${ToFixed(widget.data["totalPieces"])}",
+                              size: 16, color: Colors.black),
+                          tx400("Total Pieces", size: 10, color: Colors.black)
+                        ],
+                      )
+                  ],
+                )
+              ],
+            ),
           ))
         ],
       ),

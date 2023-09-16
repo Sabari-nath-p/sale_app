@@ -1,0 +1,35 @@
+PODS:
+  - FlutterMacOS (1.0.0)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - simple_animation_progress_bar (0.0.1):
+    - FlutterMacOS
+  - smart_auth (0.0.1):
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - simple_animation_progress_bar (from `Flutter/ephemeral/.symlinks/plugins/simple_animation_progress_bar/macos`)
+  - smart_auth (from `Flutter/ephemeral/.symlinks/plugins/smart_auth/macos`)
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  shared_preferences_foundation:
+    :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/darwin
+  simple_animation_progress_bar:
+    :path: Flutter/ephemeral/.symlinks/plugins/simple_animation_progress_bar/macos
+  smart_auth:
+    :path: Flutter/ephemeral/.symlinks/plugins/smart_auth/macos
+
+SPEC CHECKSUMS:
+  FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
+  shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
+  simple_animation_progress_bar: d76494dba0304b6f0ca56d3657b54a0de7e3b6ed
+  smart_auth: b38e3ab4bfe089eacb1e233aca1a2340f96c28e9
+
+PODFILE CHECKSUM: 236401fc2c932af29a9fcf0e97baeeb2d750d367
+
+COCOAPODS: 1.12.1

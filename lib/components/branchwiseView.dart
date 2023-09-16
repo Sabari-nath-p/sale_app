@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:seematti/components/salesdetailscard.dart';
 
 import '../utiles/colors.dart';
+import '../utiles/functionSupporter.dart';
 import '../utiles/sizer.dart';
 import '../utiles/textstyles.dart';
 import 'branchwiseSaled.dart';
@@ -52,33 +53,41 @@ class _BranchWiseViewState extends State<BranchWiseView> {
           height: 45,
           width: double.infinity,
           alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(horizontal: 8),
+          padding: EdgeInsets.symmetric(horizontal: 1),
           margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Color(0xff767680).withOpacity(.12)),
-          child: TextField(
-            textAlignVertical: TextAlignVertical.center,
-            onChanged: (value) {
-              setState(() {
-                SearchText = value;
-              });
-            },
-            decoration: InputDecoration(
-                border: InputBorder.none,
-                isDense: true,
-                hintText: "Search",
-                isCollapsed: true,
-                hintStyle: TextStyle(
-                    fontFamily: "lato",
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xff3C3C43)),
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 22,
-                  color: Color(0xff3C3C43),
-                )),
+          child: Row(
+            children: [
+              width(8),
+              Icon(
+                Icons.search,
+                size: 22,
+                color: Color(0xff3C3C43),
+              ),
+              width(6),
+              Expanded(
+                child: TextField(
+                    textAlignVertical: TextAlignVertical.center,
+                    onChanged: (value) {
+                      setState(() {
+                        SearchText = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      isDense: true,
+                      hintText: "Search",
+                      isCollapsed: true,
+                      hintStyle: TextStyle(
+                          fontFamily: "lato",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xff3C3C43)),
+                    )),
+              ),
+            ],
           ),
         ),
         Container(
@@ -198,15 +207,15 @@ class _BranchWiseViewState extends State<BranchWiseView> {
             children: [
               height(30),
               if (branchWiseController == 0)
-                tx700(totalSales.toString(), size: 22, color: Colors.black),
+                tx700(ToFixed(totalSales), size: 22, color: Colors.black),
               if (branchWiseController == 1)
-                tx700(totalProfits.toString(), size: 22, color: Colors.black),
+                tx700(ToFixed(totalProfits), size: 22, color: Colors.black),
               height(8),
               if (branchWiseController == 0)
-                tx500("Total Sales - All Branch",
+                tx500("Today's sale - All Branches",
                     size: 13, color: Colors.black),
               if (branchWiseController == 1)
-                tx500("Total Profit - All Branch",
+                tx500("Today's profit - All Branches",
                     size: 13, color: Colors.black),
               height(22),
             ],

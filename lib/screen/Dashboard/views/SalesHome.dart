@@ -16,6 +16,7 @@ import 'package:seematti/main.dart';
 import 'package:seematti/utiles/colors.dart';
 import 'package:seematti/utiles/dateConverter.dart';
 
+import '../../../utiles/functionSupporter.dart';
 import '../../../utiles/sizer.dart';
 import '../../../utiles/textstyles.dart';
 import 'package:http/http.dart' as http;
@@ -48,7 +49,7 @@ class _ScalesHomeState extends State<ScalesHome> {
     CompanyList = widget.clist;
     //BranchList = widget.blist;
     if (CompanyList.isNotEmpty) selectedCompany = CompanyList[0]["company"];
-    selectedBranch = "All";
+    selectedBranch = "All Branches";
     SalesData = widget.SalesData;
     super.initState();
     loadCompany();
@@ -117,7 +118,8 @@ class _ScalesHomeState extends State<ScalesHome> {
       var js = json.decode(Respones.body);
       if (js["success"] && js["success"] != null) {
         setState(() {
-          BranchList.add({"branch": "All", "branchID": "ALL"});
+          BranchList.add(
+              {"branch": "All Branches", "branchID": "All Branches"});
           for (var data in js["data"]) BranchList.add(data);
           print(BranchList);
           //   if (BranchList.isNotEmpty) selectedBranch = js["data"][0]["branch"];
@@ -130,7 +132,7 @@ class _ScalesHomeState extends State<ScalesHome> {
   List BranchIDlist() {
     List temp = [];
     for (var data in BranchList)
-      if (data["branch"] != "All") temp.add(data["branchID"]);
+      if (data["branch"] != "All Branches") temp.add(data["branchID"]);
     return temp;
   }
 
@@ -198,7 +200,7 @@ class _ScalesHomeState extends State<ScalesHome> {
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            height: 90,
+            //height: 90,
             alignment: Alignment.bottomLeft,
             color: Color(0xffF3F1EE),
             child: Row(
@@ -220,6 +222,19 @@ class _ScalesHomeState extends State<ScalesHome> {
                   tx600("Sales Statistics", size: 18, color: Colors.black),
                 if (backController == 2)
                   tx600("Branch-wise", size: 18, color: Colors.black),
+                Expanded(
+                    child: Container(
+                  height: 20,
+                )),
+                if (backController != 0)
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: Image.asset(
+                      "assets/icons/atoz.png",
+                      fit: BoxFit.fill,
+                    ),
+                  )
               ],
             ),
           ),
@@ -255,6 +270,8 @@ class _ScalesHomeState extends State<ScalesHome> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color(0xff323030), width: .6),
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: (CompanyList.length == 1)
@@ -264,6 +281,13 @@ class _ScalesHomeState extends State<ScalesHome> {
                                     isExpanded: true,
                                     value: selectedCompany,
                                     isDense: true,
+                                    icon: RotatedBox(
+                                      quarterTurns: (3).toInt(),
+                                      child: Icon(
+                                        Icons.arrow_back_ios_new,
+                                        size: 14,
+                                      ),
+                                    ),
                                     underline: Container(),
                                     onChanged: (value) {
                                       setState(() {
@@ -274,7 +298,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                                       for (var data in CompanyList) {
                                         setState(() {
                                           BranchList.clear();
-                                          selectedBranch = "All";
+                                          selectedBranch = "All Branches";
                                         });
                                         if (data["company"] == value) {
                                           loadBranch(data["companyID"]);
@@ -284,8 +308,11 @@ class _ScalesHomeState extends State<ScalesHome> {
                                     items: CompanyList.map((var data) {
                                       return new DropdownMenuItem<String>(
                                         value: data["company"].toString(),
-                                        child: tx500(data["company"].toString(),
-                                            size: 14, color: Colors.black),
+                                        child: tx500(
+                                            StringtoFormate(
+                                                data["company"].toString()),
+                                            size: 14,
+                                            color: Colors.black),
                                       );
                                     }).toList())),
                       if (selectedBranch != "")
@@ -295,6 +322,8 @@ class _ScalesHomeState extends State<ScalesHome> {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),
                             decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: Color(0xff323030), width: .6),
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: (BranchList.length == 1)
@@ -304,6 +333,13 @@ class _ScalesHomeState extends State<ScalesHome> {
                                     isExpanded: true,
                                     value: selectedBranch,
                                     isDense: true,
+                                    icon: RotatedBox(
+                                      quarterTurns: (3).toInt(),
+                                      child: Icon(
+                                        Icons.arrow_back_ios_new,
+                                        size: 14,
+                                      ),
+                                    ),
                                     underline: Container(),
                                     onChanged: (value) {
                                       setState(() {
@@ -417,7 +453,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                         Positioned(
                             left: 40,
                             top: 60,
-                            child: tx700("$totalSale",
+                            child: tx700("$totalSale.00",
                                 size: 22, color: Colors.white)),
                         Positioned(
                             left: 40,
@@ -427,7 +463,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                         Positioned(
                             left: 40,
                             bottom: 40,
-                            child: tx700("$totalProfites",
+                            child: tx700("$totalProfites.00",
                                 size: 19, color: Colors.white)),
                         Positioned(
                           top: 30,
@@ -454,7 +490,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                                       tx700("Sales",
                                           color: Colors.black, size: 14),
                                     if (SalesData["sales"].isNotEmpty)
-                                      tx500("Branch Wise",
+                                      tx500("Branch-wise",
                                           color: Colors.black, size: 8),
                                     if (SalesData["sales"].isEmpty)
                                       tx700("No Sales",
@@ -605,16 +641,20 @@ class _ScalesHomeState extends State<ScalesHome> {
                     children: [
                       SalesCard(
                           "assets/icons/discount.png",
-                          SalesData["discountAmount"].toString(),
+                          "${SalesData["discountAmount"].toString()}.00",
                           "Discount Amount"),
-                      SalesCard("assets/icons/tax.png",
-                          SalesData["taxAmount"].toString(), "Tax Amount"),
+                      SalesCard(
+                          "assets/icons/tax.png",
+                          "${SalesData["taxAmount"].toString()}.00",
+                          "Tax Amount"),
                       SalesCard(
                           "assets/icons/return.png",
-                          SalesData["returnAmount"].toString(),
+                          "${SalesData["returnAmount"].toString()}.00",
                           "Return Amount"),
-                      SalesCard("assets/icons/pieces.png",
-                          SalesData["totalPieces"].toString(), "Total Pieces"),
+                      SalesCard(
+                          "assets/icons/pieces.png",
+                          "${SalesData["totalPieces"].toString()}.00",
+                          "Total Pieces"),
                     ],
                   ),
                   height(10)

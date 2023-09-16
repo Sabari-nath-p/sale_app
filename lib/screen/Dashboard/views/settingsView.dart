@@ -182,7 +182,7 @@ class _settingViewState extends State<settingView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      tx400("Current Password"),
+                      tx400("Old Password"),
                       height(11),
                       Container(
                         height: 50,
@@ -468,7 +468,7 @@ class _settingViewState extends State<settingView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              tx400("Location", size: 13, color: Colors.black),
+                              tx400("Locations", size: 13, color: Colors.black),
                               height(10),
                               for (var data in UserData["location"])
                                 branchCard("${data["company"]}",
@@ -559,7 +559,7 @@ class _settingViewState extends State<settingView> {
         padding: EdgeInsets.symmetric(vertical: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.black45))),
+            border: Border(bottom: BorderSide(color: Colors.black54))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

@@ -37,9 +37,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         body: json.encode({
           "email": widget.userid,
         }));
-
+    print(Response.body);
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
+
       if (js["success"] == true && js["success"] != null) {
         Fluttertoast.showToast(
             msg: "Otp has been sent to your registered mail id");

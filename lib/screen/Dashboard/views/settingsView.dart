@@ -337,7 +337,7 @@ class _settingViewState extends State<settingView> {
                     } else if (newPass.text != confirmPass.text) {
                       Fluttertoast.showToast(
                           msg:
-                              'new password and confrim passwords are mismatch');
+                              'new password and confirm password are mismatch');
                     } else if (newPass.text == currectPass.text) {
                       Fluttertoast.showToast(
                           msg: 'new password and old password can\'t be same');
@@ -444,7 +444,7 @@ class _settingViewState extends State<settingView> {
                         "assets/icons/profile.png"),
                     profileItem("Designation", "${UserData["designation"]}",
                         "assets/icons/position.png"),
-                    profileItem("Phone No.", "${UserData["phoneNo"]}",
+                    profileItem("Phone No.", "+91 ${UserData["phoneNo"]}",
                         "assets/icons/phone.png"),
                     profileItem("Email", "${UserData["emailAddress"]}",
                         "assets/icons/mail.png"),

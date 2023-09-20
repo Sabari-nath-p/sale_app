@@ -412,7 +412,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         height(15),
                         Center(
-                            child: tx400("Ver : 1.00.1.00",
+                            child: tx400("Ver. : 1.00.1.00",
                                 size: 14, textAlign: TextAlign.center)),
                         height(140),
                         Container(

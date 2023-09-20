@@ -131,7 +131,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           radius: 10),
                     ),
                     height(20),
-                    tx500("Ver : 1.00.1.00", color: Colors.white),
+                    tx500("Ver. : 1.00.1.00", color: Colors.white),
                     height(70),
                     //tx600("Service ver : 1.0.0", color: Colors.white),
                     height(4),

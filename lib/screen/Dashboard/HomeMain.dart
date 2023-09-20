@@ -54,7 +54,7 @@ class _HomeMainState extends State<HomeMain> {
                     "assets/icons/setting.png",
                     color: (bottomIndex == 1) ? primaryColor : Colors.black45,
                   )),
-              label: "Setting",
+              label: "Settings",
             ),
             BottomNavigationBarItem(
                 icon: SizedBox(

@@ -275,8 +275,10 @@ class _ScalesHomeState extends State<ScalesHome> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: (CompanyList.length == 1)
-                                ? tx500(CompanyList[0]["company"],
-                                    size: 14, color: Colors.black)
+                                ? tx500(
+                                    StringtoFormate(CompanyList[0]["company"]),
+                                    size: 14,
+                                    color: Colors.black)
                                 : DropdownButton(
                                     isExpanded: true,
                                     value: selectedCompany,
@@ -327,8 +329,10 @@ class _ScalesHomeState extends State<ScalesHome> {
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.white),
                             child: (BranchList.length == 1)
-                                ? tx500(BranchList[0]["branch"],
-                                    size: 14, color: Colors.black)
+                                ? tx500(
+                                    StringtoFormate(BranchList[0]["branch"]),
+                                    size: 14,
+                                    color: Colors.black)
                                 : DropdownButton(
                                     isExpanded: true,
                                     value: selectedBranch,

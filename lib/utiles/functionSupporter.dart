@@ -3,5 +3,9 @@ StringtoFormate(String s) {
 }
 
 String ToFixed(var value, {int decimal = 2}) {
-  return double.parse(value.toStringAsFixed(decimal)).toString();
+  double val = double.parse(value.toString()).toDouble();
+  if (val % 10 != 0) {
+    return double.parse(value.toStringAsFixed(decimal)).toString();
+  } else
+    return double.parse(value.toString()).toString() + "0";
 }

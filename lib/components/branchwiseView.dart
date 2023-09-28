@@ -82,11 +82,17 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                       isCollapsed: true,
                       hintStyle: TextStyle(
                           fontFamily: "lato",
-                          fontSize: 16,
+                          fontSize: 17,
                           fontWeight: FontWeight.w500,
                           color: Color(0xff3C3C43)),
                     )),
               ),
+              Icon(
+                Icons.mic,
+                size: 22,
+                color: Color(0xff3C3C43),
+              ),
+              width(8),
             ],
           ),
         ),

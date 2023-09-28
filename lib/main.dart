@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:seematti/constants/stringData.dart';
 import 'package:seematti/screen/Dashboard/HomeMain.dart';
@@ -17,6 +18,9 @@ String userid = "";
 String token = "";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  
   SharedPreferences preferences = await SharedPreferences.getInstance();
   login = preferences.getString("LOGIN").toString();
 

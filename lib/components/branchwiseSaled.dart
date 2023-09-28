@@ -66,8 +66,8 @@ class BranchWiseSales extends StatelessWidget {
               Expanded(child: Container()),
               tx700(
                   (isSale)
-                      ? "${ToFixed(Amountdata["salesPercentage"])}"
-                      : "${ToFixed(Amountdata["profitPercentage"])}",
+                      ? "${Amountdata["salesPercentage"]}%"
+                      : "${Amountdata["profitPercentage"]}%",
                   size: 18,
                   color: color)
             ],

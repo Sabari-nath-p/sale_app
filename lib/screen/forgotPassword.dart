@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:pinput/pinput.dart';
 import 'package:seematti/constants/stringData.dart';
 import 'package:seematti/utiles/colors.dart';
 import 'package:seematti/utiles/sizer.dart';
 import 'package:seematti/utiles/textstyles.dart';
+import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -56,8 +58,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   int PageController = 0;
   bool isconfirm = false;
   bool isnew = false;
+  CountdownController countdownController =
+      CountdownController(autoStart: true);
   bool isloading = false;
   bool resendController = true;
+
   TextEditingController otpController = TextEditingController();
   TextEditingController newPass = TextEditingController();
   TextEditingController confirmPass = TextEditingController();
@@ -81,7 +86,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   width(10),
                   tx600(
                       (PageController == 1) ? "Create Password" : "Verify OTP",
-                      size: 18),
+                      size: 18,
+                      color: Colors.black),
                 ],
               ),
             ),
@@ -117,9 +123,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               size: 14,
                               color: Colors.black),
                           height(44),
-                          tx700("One Time Password"),
+                          tx700("One Time Password", color: Colors.black),
                           height(22),
                           Pinput(
+                            controller: otpController,
                             separatorBuilder: (index) {
                               return width(15);
                             },
@@ -129,6 +136,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           if (resendController)
                             Countdown(
                               seconds: 30,
+                              controller: countdownController,
                               build: (BuildContext context, double time) =>
                                   tx700(formatDuration(
                                       Duration(seconds: time.round()))),
@@ -154,7 +162,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       print("working");
                                       sentOtp();
                                       setState(() {
-                                        resendController = false;
+                                        countdownController.restart();
+                                        isResendReady = false;
                                       });
                                     }
                                   },
@@ -185,13 +194,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                           ),
                           height(50),
-                          tx500("Create new password"),
+                          tx500("Create new password", color: Colors.black),
                           height(20),
                           tx400(
-                              "Your new password must be different from previous used password",
-                              size: 14),
+                              "Your new password must be different from previous\nused password",
+                              size: 14,
+                              color: Color(0xff323030)),
                           height(41),
-                          tx400("New Password", size: 14),
+                          tx400("New password",
+                              size: 14, color: Color(0xff323030)),
                           height(11),
                           Container(
                             height: 50,
@@ -235,7 +246,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                           ),
                           height(17),
-                          tx400("Confirm New Password", size: 14),
+                          tx400("Confirm new password",
+                              size: 14, color: Color(0xff323030)),
                           height(11),
                           Container(
                             height: 50,
@@ -292,15 +304,26 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onTap: () {
                     //   ScreenChanger(context, LoginScreen());
                     if (otpController.text.isEmpty) {
-                      Fluttertoast.showToast(msg: "Please enter otp");
+                      Fluttertoast.showToast(
+                          msg: "Please enter otp", gravity: ToastGravity.TOP);
                     } else if (isloading) {
-                      Fluttertoast.showToast(msg: "please wait");
+                      Fluttertoast.showToast(
+                          msg: "Please wait", gravity: ToastGravity.TOP);
                     } else {
                       checkOtp(otpController.text.trim());
                     }
                   },
                   child: ButtonContainer(
-                      tx600("Verify OTP", color: Colors.white),
+                      (isloading)
+                          ? SizedBox(
+                              width: 30,
+                              child: LoadingIndicator(
+                                indicatorType: Indicator.lineScalePulseOutRapid,
+                                colors: [Colors.white],
+                                strokeWidth: 10,
+                              ),
+                            )
+                          : tx600("Verify OTP", color: Colors.white),
                       color: primaryColor,
                       height: 50,
                       radius: 10),
@@ -313,22 +336,36 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onTap: () {
                     //   ScreenChanger(context, LoginScreen());
                     if (newPass.text.isEmpty) {
-                      Fluttertoast.showToast(msg: "Please fill new password");
+                      Fluttertoast.showToast(
+                          msg: "Please fill new password",
+                          gravity: ToastGravity.TOP);
                     } else if (confirmPass.text.isEmpty) {
                       Fluttertoast.showToast(
-                          msg: "Please fill confirm password");
+                          msg: "Please fill confirm password",
+                          gravity: ToastGravity.TOP);
                     } else if (isloading) {
-                      Fluttertoast.showToast(msg: "please wait");
+                      Fluttertoast.showToast(
+                          msg: "Please wait", gravity: ToastGravity.TOP);
                     } else if (newPass.text != confirmPass.text) {
                       Fluttertoast.showToast(
                           msg:
-                              'new password and confrim passwords are mismatch');
+                              'New password and confrim passwords are mismatch',
+                          gravity: ToastGravity.TOP);
                     } else {
                       ResetPassword();
                     }
                   },
                   child: ButtonContainer(
-                      tx600("Reset Password", color: Colors.white),
+                      (isloading)
+                          ? SizedBox(
+                              width: 30,
+                              child: LoadingIndicator(
+                                indicatorType: Indicator.lineScalePulseOutRapid,
+                                colors: [Colors.white],
+                                strokeWidth: 10,
+                              ),
+                            )
+                          : tx600("Reset Password", color: Colors.white),
                       color: primaryColor,
                       height: 50,
                       radius: 10),
@@ -350,7 +387,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           'Content-Type': 'application/json',
         },
         body: json.encode({"email": widget.userid, "otp": "$otp"}));
-
+    print(Response.body);
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
       if (js["success"] == true && js["success"] != null) {
@@ -360,7 +397,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           isloading = false;
         });
       } else {
-        Fluttertoast.showToast(msg: "Invalid otp");
+        Fluttertoast.showToast(msg: "Invalid otp", gravity: ToastGravity.TOP);
         setState(() {
           isloading = false;
         });
@@ -369,7 +406,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() {
         isloading = false;
       });
-      Fluttertoast.showToast(msg: "Something went wrong");
+      Fluttertoast.showToast(
+          msg: "Something went wrong", gravity: ToastGravity.TOP);
     }
   }
 
@@ -382,19 +420,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           'Content-Type': 'application/json',
         },
         body: json.encode({
-          {
-            "resetPasswordCode": resetPasswordCode,
-            "newPassword": newPass.text.trim()
-          }
+          "resetPasswordCode": resetPasswordCode,
+          "newPassword": newPass.text.trim()
         }));
-
+    print(Response.body);
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
       if (js["success"] == true && js["success"] != null) {
-        Fluttertoast.showToast(msg: "Password  Successfully updated");
+        Fluttertoast.showToast(
+            msg: "Password  successfully updated", gravity: ToastGravity.TOP);
         Navigator.of(context).pop();
       } else {
-        Fluttertoast.showToast(msg: "password reset failed");
+        Fluttertoast.showToast(
+            msg: "Password reset failed", gravity: ToastGravity.TOP);
         setState(() {
           isloading = false;
         });
@@ -403,7 +441,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       setState(() {
         isloading = false;
       });
-      Fluttertoast.showToast(msg: "Something went wrong");
+      Fluttertoast.showToast(
+          msg: "Something went wrong", gravity: ToastGravity.SNACKBAR);
     }
   }
 

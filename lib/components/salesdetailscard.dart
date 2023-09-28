@@ -22,7 +22,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
     return AnimatedContainer(
       height: (isExpanded) ? 220 : 130,
       curve: Curves.easeIn,
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -109,23 +109,26 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        tx600("${ToFixed(widget.data["discountAmount"])}",
-                            size: 16, color: Colors.black),
-                        tx400("Discount Amount", size: 10, color: Colors.black)
-                      ],
-                    ),
+                    if (isExpanded)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          tx600("${ToFixed(widget.data["discountAmount"])}",
+                              size: 16, color: Colors.black),
+                          tx400("Discount Amount",
+                              size: 10, color: Colors.black)
+                        ],
+                      ),
                     height(15),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        tx600("${ToFixed(widget.data["taxAmount"])}",
-                            size: 16, color: Colors.black),
-                        tx400("Tax Amount", size: 10, color: Colors.black)
-                      ],
-                    ),
+                    if (isExpanded)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          tx600("${ToFixed(widget.data["returnAmount"])}",
+                              size: 16, color: Colors.black),
+                          tx400("Return Amount", size: 10, color: Colors.black)
+                        ],
+                      ),
                   ],
                 ),
                 Column(
@@ -136,9 +139,9 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          tx600("${ToFixed(widget.data["returnAmount"])}",
+                          tx600("${ToFixed(widget.data["taxAmount"])}",
                               size: 16, color: Colors.black),
-                          tx400("Return Amount", size: 10, color: Colors.black)
+                          tx400("Tax Amount", size: 10, color: Colors.black)
                         ],
                       ),
                     height(15),
@@ -146,7 +149,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          tx600("${ToFixed(widget.data["totalPieces"])}",
+                          tx600("${widget.data["totalPieces"]}",
                               size: 16, color: Colors.black),
                           tx400("Total Pieces", size: 10, color: Colors.black)
                         ],

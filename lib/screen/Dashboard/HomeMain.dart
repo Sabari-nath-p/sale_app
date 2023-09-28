@@ -20,79 +20,84 @@ class HomeMain extends StatefulWidget {
 
 class _HomeMainState extends State<HomeMain> {
   int bottomIndex = 0;
+
+  ValueNotifier notifier = ValueNotifier(10);
+  loadNotifier() async {
+    notifier.addListener(() {
+      setState(() {
+        bottomIndex = 0; // notifier.value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    loadNotifier();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          onTap: (value) {
-            setState(() {
-              bottomIndex = value;
-            });
-          },
-          selectedItemColor: primaryColor,
-          currentIndex: bottomIndex,
-          selectedLabelStyle:
-              TextStyle(fontFamily: "lato", fontWeight: FontWeight.w600),
-          unselectedLabelStyle:
-              TextStyle(fontFamily: "lato", fontWeight: FontWeight.w500),
-          items: [
-            BottomNavigationBarItem(
+          bottomNavigationBar: BottomNavigationBar(
+            onTap: (value) {
+              setState(() {
+                bottomIndex = value;
+              });
+            },
+            selectedItemColor: primaryColor,
+            currentIndex: bottomIndex,
+            selectedLabelStyle:
+                TextStyle(fontFamily: "lato", fontWeight: FontWeight.w600),
+            unselectedLabelStyle:
+                TextStyle(fontFamily: "lato", fontWeight: FontWeight.w500),
+            items: [
+              BottomNavigationBarItem(
+                  icon: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.asset(
+                        "assets/icons/sales.png",
+                        color:
+                            (bottomIndex == 0) ? primaryColor : Colors.black87,
+                      )),
+                  label: "Sales"),
+              BottomNavigationBarItem(
                 icon: SizedBox(
                     width: 40,
                     height: 40,
                     child: Image.asset(
-                      "assets/icons/sales.png",
-                      color: (bottomIndex == 0) ? primaryColor : Colors.black45,
+                      "assets/icons/setting.png",
+                      color: (bottomIndex == 1) ? primaryColor : Colors.black87,
                     )),
-                label: "Sales"),
-            BottomNavigationBarItem(
-              icon: SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: Image.asset(
-                    "assets/icons/setting.png",
-                    color: (bottomIndex == 1) ? primaryColor : Colors.black45,
-                  )),
-              label: "Settings",
-            ),
-            BottomNavigationBarItem(
-                icon: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Image.asset(
-                      "assets/icons/notification.png",
-                      color: (bottomIndex == 2) ? primaryColor : Colors.black45,
-                    )),
-                label: "Notifications")
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              if (bottomIndex == 0)
-                SizedBox(
-                    //   padding: MediaQuery.of(context).viewInsets,
-                    height: MediaQuery.of(context).size.height - 74,
-                    child: ScalesHome(
-                        clist: widget.companyList,
-                        blist: widget.branchList,
-                        SalesData: widget.Salesdata)),
-              //  if (bottomIndex == 2)
-              if (bottomIndex == 1)
-                SizedBox(
-                    //   padding: MediaQuery.of(context).viewInsets,
-                    height: MediaQuery.of(context).size.height - 74,
-                    child: settingView()),
-              if (bottomIndex == 2)
-                SizedBox(
-                    //   padding: MediaQuery.of(context).viewInsets,
-                    height: MediaQuery.of(context).size.height - 74,
-                    child: NotificationsScreen())
+                label: "Settings",
+              ),
+              BottomNavigationBarItem(
+                  icon: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: Image.asset(
+                        "assets/icons/notification.png",
+                        color:
+                            (bottomIndex == 2) ? primaryColor : Colors.black87,
+                      )),
+                  label: "Notifications")
             ],
           ),
-        ),
-      ),
+          body: (bottomIndex == 0)
+              ? ScalesHome(
+                  clist: widget.companyList,
+                  blist: widget.branchList,
+                  SalesData: widget.Salesdata)
+              //  if (bottomIndex == 2)
+              : (bottomIndex == 1)
+                  ? settingView(
+                      notifier: notifier,
+                    )
+                  : NotificationsScreen(
+                      notifier: notifier,
+                    )),
     );
   }
 }

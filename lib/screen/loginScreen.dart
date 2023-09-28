@@ -39,16 +39,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   loadStartup() async {
-    await Future.delayed(Duration(seconds: 0));
+    await Future.delayed(Duration(seconds: 1));
     setState(() {
-      size = 700;
+      size = MediaQuery.of(context).size.height - 135;
       isAnimated = true;
+    });
+    await Future.delayed(Duration(milliseconds: 680));
+    setState(() {
+      isAnimationCompleted = true;
     });
   }
 
   double size = 0;
   bool isAnimated = false;
-
+  bool isAnimationCompleted = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -128,11 +132,12 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Positioned(
                 // top: size,
+                top: (!isAnimationCompleted) ? null : 135,
                 left: 0,
                 right: 0,
                 bottom: 0,
                 child: AnimatedContainer(
-                  height: density(size),
+                  height: (!isAnimated) ? 0 : density(size),
                   duration: Duration(milliseconds: 800),
                   curve: Curves.decelerate,
                   padding: EdgeInsets.symmetric(horizontal: 30),
@@ -147,114 +152,117 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              height(40),
-                              tx700("Welcome", size: 22, color: Colors.black),
-                              height(11),
-                              Wrap(
-                                children: [
-                                  tx400("Login to your account to view your ",
-                                      size: 14, color: Colors.black),
-                                  tx600("business.",
-                                      color: Colors.black, size: 14),
-                                ],
-                              ),
-                              height(50),
-                              tx400("Mobile / Email",
-                                  size: 14, color: Color(0xff323030)),
-                              height(11),
-                              Container(
-                                height: 50,
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black54),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
-                                  controller: emailController,
-                                  focusNode: emailFocuse,
-                                  onChanged: (value) {
-                                    if (emailController.text.length > 2 &&
-                                        passwordController.text.length > 2)
-                                      setState(() {
-                                        isReady = true;
-                                      });
-                                    else {
-                                      setState(() {
-                                        isReady = false;
-                                      });
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      isCollapsed: true,
-                                      isDense: true),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                height(40),
+                                tx700("Welcome", size: 22, color: Colors.black),
+                                height(11),
+                                Wrap(
+                                  children: [
+                                    tx400("Login to your account to view your ",
+                                        size: 14, color: Colors.black),
+                                    tx600("business.",
+                                        color: Colors.black, size: 14),
+                                  ],
                                 ),
-                              ),
-                              height(17),
-                              tx400("Password",
-                                  size: 14, color: Color(0xff323030)),
-                              height(11),
-                              Container(
-                                height: 50,
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black54),
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: TextField(
-                                  obscureText: !isPassVisible,
-                                  controller: passwordController,
-                                  onChanged: (value) {
-                                    if (emailController.text.length > 2 &&
-                                        passwordController.text.length > 2)
-                                      setState(() {
-                                        isReady = true;
-                                      });
-                                    else {
-                                      setState(() {
-                                        isReady = false;
-                                      });
-                                    }
-                                  },
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      // isCollapsed: true,
-                                      suffixIcon: (isPassVisible)
-                                          ? InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  isPassVisible =
-                                                      !isPassVisible;
-                                                });
-                                              },
-                                              child: Icon(
-                                                Icons.visibility,
-                                                color: Colors.black54,
-                                              ),
-                                            )
-                                          : InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  isPassVisible =
-                                                      !isPassVisible;
-                                                });
-                                              },
-                                              child: Icon(
-                                                Icons.visibility_off,
-                                                color: Colors.black54,
-                                              ),
-                                            ),
-                                      isDense: true),
+                                height(50),
+                                tx400("Mobile / Email",
+                                    size: 14, color: Color(0xff323030)),
+                                height(11),
+                                Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black54),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: TextField(
+                                    controller: emailController,
+                                    focusNode: emailFocuse,
+                                    onChanged: (value) {
+                                      if (emailController.text.length > 2 &&
+                                          passwordController.text.length > 2)
+                                        setState(() {
+                                          isReady = true;
+                                        });
+                                      else {
+                                        setState(() {
+                                          isReady = false;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        isCollapsed: true,
+                                        isDense: true),
+                                  ),
                                 ),
-                              ),
-                            ],
+                                height(17),
+                                tx400("Password",
+                                    size: 14, color: Color(0xff323030)),
+                                height(11),
+                                Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12, vertical: 8),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black54),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: TextField(
+                                    obscureText: !isPassVisible,
+                                    controller: passwordController,
+                                    onChanged: (value) {
+                                      if (emailController.text.length > 2 &&
+                                          passwordController.text.length > 2)
+                                        setState(() {
+                                          isReady = true;
+                                        });
+                                      else {
+                                        setState(() {
+                                          isReady = false;
+                                        });
+                                      }
+                                    },
+                                    decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        // isCollapsed: true,
+                                        suffixIcon: (isPassVisible)
+                                            ? InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    isPassVisible =
+                                                        !isPassVisible;
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.visibility,
+                                                  color: Colors.black54,
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    isPassVisible =
+                                                        !isPassVisible;
+                                                  });
+                                                },
+                                                child: Icon(
+                                                  Icons.visibility_off,
+                                                  color: Colors.black54,
+                                                ),
+                                              ),
+                                        isDense: true),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
+                        height(5),
                         Container(
                           width: double.infinity,
                           child: Row(
@@ -282,7 +290,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     } else {
                                       Fluttertoast.showToast(
                                           msg:
-                                              "Please enter email id for reset password");
+                                              "Please enter email id for reset password and click forgot option");
                                       // FocusScope.of(context)
                                       //     .requestFocus(emailFocuse);
                                       // emailController.
@@ -294,7 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                        height(20),
+                        height(5),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: InkWell(
@@ -302,17 +310,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               //   ScreenChanger(context, HomeMain());
                               if (!isReady) {
                                 Fluttertoast.showToast(
-                                    msg: "Please fill login credentials");
+                                    msg: "Please fill login credentials",
+                                    gravity: ToastGravity.TOP);
                                 return;
                               }
                               if (isLoading) {
-                                Fluttertoast.showToast(msg: "Please wait");
+                                Fluttertoast.showToast(
+                                    msg: "Please wait",
+                                    gravity: ToastGravity.TOP);
                                 return;
                               }
 
                               setState(() {
                                 isLoading = true;
                               });
+
                               try {
                                 final Response =
                                     await http.post(Uri.parse("$baseurl/login"),
@@ -329,13 +341,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                 //noprint(Response.body);
                                 //noprint(Response.statusCode);
+                                print("working");
 
+                                print(Response.body);
                                 if (Response.statusCode == 200) {
                                   var res = json.decode(Response.body);
 
                                   if (res["success"] &&
                                       res["success"] != null) {
                                     //noprint(res);
+                                    print(Response.body);
                                     print(Response.body);
                                     SharedPreferences pref =
                                         await SharedPreferences.getInstance();
@@ -354,7 +369,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           'Content-Type': 'application/json',
                                           'Authorization': 'Bearer $token'
                                         });
-
+                                    print(pp.body);
                                     if (pp.statusCode == 200) {
                                       var js = json.decode(pp.body);
                                       UserData = js["data"][0];
@@ -374,18 +389,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                       isLoading = false;
                                     });
                                     Fluttertoast.showToast(
-                                        msg: "Incorrect Credentials");
+                                        msg: "Incorrect credentials",
+                                        gravity: ToastGravity.TOP);
                                   }
                                 } else {
-                                  Fluttertoast.showToast(msg: "Bad Request");
+                                  Fluttertoast.showToast(
+                                      msg: "Bad request",
+                                      gravity: ToastGravity.TOP);
                                   setState(() {
                                     isLoading = false;
                                   });
                                 }
                               } on SocketException catch (_) {
                                 Fluttertoast.showToast(
-                                    msg:
-                                        "Please Connect to internet and retry");
+                                    msg: "Please connect to internet and retry",
+                                    gravity: ToastGravity.TOP);
                                 setState(() {
                                   isLoading = false;
                                 });
@@ -412,8 +430,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         height(15),
                         Center(
-                            child: tx400("Ver. : 1.00.1.00",
-                                size: 14, textAlign: TextAlign.center)),
+                            child: tx400("Ver. - 1.00.1.00",
+                                size: 14,
+                                textAlign: TextAlign.center,
+                                color: Colors.black)),
                         height(140),
                         Container(
                           alignment: Alignment.center,

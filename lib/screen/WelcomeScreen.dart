@@ -106,17 +106,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     height(30),
                     Container(
-                      alignment: Alignment.centerLeft,
                       width: double.infinity,
-                      padding: const EdgeInsets.only(left: 33, right: 100),
-                      child: tx500("Just one step away to view your",
-                          color: Colors.white, size: 16),
+                      alignment: Alignment.center,
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        width: 309,
+                        //  padding: const EdgeInsets.only(left: 36, right: 100),
+                        child: tx500("Just one step away to view your",
+                            color: Colors.white, size: 16),
+                      ),
                     ),
                     Container(
-                      alignment: Alignment.centerLeft,
-                      width: double.infinity,
-                      padding: const EdgeInsets.only(left: 33, right: 120),
-                      child: tx700("business.", color: Colors.white, size: 16),
+                      alignment: Alignment.center,
+                      child: Container(
+                        alignment: Alignment.centerLeft,
+                        width: 309,
+                        child:
+                            tx700("business.", color: Colors.white, size: 16),
+                      ),
                     ),
                     height(70),
                     InkWell(
@@ -131,7 +138,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           radius: 10),
                     ),
                     height(20),
-                    tx500("Ver. : 1.00.1.00", color: Colors.white),
+                    tx500("Ver. - 1.00.1.00", color: Colors.white),
                     height(70),
                     //tx600("Service ver : 1.0.0", color: Colors.white),
                     height(4),

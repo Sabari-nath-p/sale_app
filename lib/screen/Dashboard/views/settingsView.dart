@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:seematti/constants/stringData.dart';
+import 'package:seematti/screen/forgotPassword.dart';
 import 'package:seematti/screen/loginScreen.dart';
 import 'package:seematti/utiles/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,8 @@ import '../../../utiles/textstyles.dart';
 import 'package:http/http.dart';
 
 class settingView extends StatefulWidget {
-  const settingView({super.key});
+  ValueNotifier notifier;
+  settingView({super.key, required this.notifier});
 
   @override
   State<settingView> createState() => _settingViewState();
@@ -73,7 +75,8 @@ class _settingViewState extends State<settingView> {
       var js = json.decode(res.body);
       print(js);
       setState(() {
-        Version = js["data"]["versionNo"];
+        Version =
+            js["data"]["versionNo"].toString().replaceAll("-SNAPSHOT", "");
       });
     }
   }
@@ -105,23 +108,31 @@ class _settingViewState extends State<settingView> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              height: 90,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              height: 50,
               alignment: Alignment.bottomLeft,
               color: Color(0xffF3F1EE),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  if (currentTitle != "Settings")
-                    InkWell(
-                        onTap: () {
-                          if (backController > 0) {
-                            setState(() {
-                              backController = 0;
-                              currentTitle = "Settings";
-                            });
-                          }
-                        },
-                        child: Icon(Icons.arrow_back)),
+                  InkWell(
+                      onTap: () {
+                        if (backController > 0) {
+                          setState(() {
+                            backController = 0;
+                            currentTitle = "Settings";
+                          });
+                        } else {
+                          print("print working");
+                          widget.notifier.value++;
+                          widget.notifier.notifyListeners();
+                        }
+                      },
+                      child: Icon(
+                        Icons.arrow_back,
+                        size: 20,
+                      )),
                   width(10),
                   tx600(currentTitle, size: 18, color: Colors.black),
                 ],
@@ -154,7 +165,7 @@ class _settingViewState extends State<settingView> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             border: Border(
-                                bottom: BorderSide(color: Colors.black45))),
+                                bottom: BorderSide(color: Color(0xffE2E2E2)))),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -182,7 +193,7 @@ class _settingViewState extends State<settingView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      tx400("Old Password"),
+                      tx400("Old password", size: 14, color: Colors.black),
                       height(11),
                       Container(
                         height: 50,
@@ -226,7 +237,7 @@ class _settingViewState extends State<settingView> {
                         ),
                       ),
                       height(17),
-                      tx400("New Password"),
+                      tx400("New password", size: 14, color: Colors.black),
                       height(11),
                       Container(
                         height: 50,
@@ -270,7 +281,8 @@ class _settingViewState extends State<settingView> {
                         ),
                       ),
                       height(17),
-                      tx400("Confirm New Password"),
+                      tx400("Confirm new password",
+                          size: 14, color: Colors.black),
                       height(11),
                       Container(
                         height: 50,
@@ -287,6 +299,10 @@ class _settingViewState extends State<settingView> {
                           decoration: InputDecoration(
                               border: InputBorder.none,
                               // isCollapsed: true,
+                              hintStyle: TextStyle(
+                                  fontFamily: "lato",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
                               suffixIcon: (isconfirm)
                                   ? InkWell(
                                       onTap: () {
@@ -321,26 +337,49 @@ class _settingViewState extends State<settingView> {
             if (backController == 2)
               Container(
                 color: Color(0xffF8F8F8),
+                padding: EdgeInsets.symmetric(horizontal: 22, vertical: 13),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 15,
+                      height: 15,
+                      child: Image.asset("assets/icons/lock.png"),
+                    ),
+                    width(6),
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ForgotPasswordScreen(
+                                userid: UserData["emailAddress"])));
+                      },
+                      child: tx500("Forgot Password?",
+                          size: 13, color: Color(0xff323030)),
+                    ),
+                  ],
+                ),
+              ),
+            if (backController == 2)
+              Container(
+                color: Color(0xffF8F8F8),
                 padding: EdgeInsets.only(left: 20, right: 20, bottom: 30),
                 child: InkWell(
                   onTap: () async {
                     if (currectPass.text.isEmpty) {
-                      Fluttertoast.showToast(
-                          msg: "Please fill current password");
+                      Fluttertoast.showToast(msg: "Please fill old password");
                     } else if (newPass.text.isEmpty) {
                       Fluttertoast.showToast(msg: "Please fill new password");
                     } else if (confirmPass.text.isEmpty) {
                       Fluttertoast.showToast(
-                          msg: "Please fill confirm password");
+                          msg: "Please fill confirm new password");
                     } else if (isloading) {
-                      Fluttertoast.showToast(msg: "please wait");
+                      Fluttertoast.showToast(msg: "Please wait");
                     } else if (newPass.text != confirmPass.text) {
                       Fluttertoast.showToast(
                           msg:
-                              'new password and confirm password are mismatch');
+                              'Given new password and confirm new password are not same');
                     } else if (newPass.text == currectPass.text) {
                       Fluttertoast.showToast(
-                          msg: 'new password and old password can\'t be same');
+                          msg: 'New password and old password can\'t be same');
                     } else {
                       setState(() {
                         isloading = true;
@@ -373,7 +412,8 @@ class _settingViewState extends State<settingView> {
                           setState(() {
                             isloading = false;
                           });
-                          Fluttertoast.showToast(msg: "Change password failed");
+                          Fluttertoast.showToast(
+                              msg: "Change password failed'");
                         }
                       } else {
                         setState(() {
@@ -446,7 +486,7 @@ class _settingViewState extends State<settingView> {
                         "assets/icons/position.png"),
                     profileItem("Phone No.", "+91 ${UserData["phoneNo"]}",
                         "assets/icons/phone.png"),
-                    profileItem("Email", "${UserData["emailAddress"]}",
+                    profileItem("Email Address", "${UserData["emailAddress"]}",
                         "assets/icons/mail.png"),
                     Container(
                       margin:
@@ -495,7 +535,7 @@ class _settingViewState extends State<settingView> {
                     ),
                     height(40),
                     infoItem("App Version", "App Ver. - $appversion"),
-                    infoItem("Updated On", "29th May 2023 06:00:00 PM"),
+                    infoItem("Updated On", "29th May 2023 \t \t 06:00:00 PM"),
                     infoItem("Released On", "29th May 2023"),
                     height(10),
                     Padding(
@@ -559,7 +599,7 @@ class _settingViewState extends State<settingView> {
         padding: EdgeInsets.symmetric(vertical: 10),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.black54))),
+            border: Border(bottom: BorderSide(color: Color(0xffE2E2E2)))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

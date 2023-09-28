@@ -108,6 +108,7 @@ flutter:
     - assets/icons/profile2.png
     - assets/icons/password.png
     - assets/icons/info.png
+    - assets/icons/lock.png
     - assets/icons/logout.png
     - assets/icons/noNotification.png
     - assets/icons/doubleright.png

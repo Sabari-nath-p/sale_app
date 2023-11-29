@@ -1,6 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:seematti/MVC/BranchModel.dart';
+import 'package:seematti/MVC/Controller.dart';
+import 'package:seematti/MVC/SaleDataModel.dart';
 import 'package:seematti/components/salesdetailscard.dart';
+import 'package:seematti/screen/Dashboard/views/SalesHome.dart';
+import 'package:sizer/sizer.dart';
 
 import '../utiles/colors.dart';
 import '../utiles/functionSupporter.dart';
@@ -9,64 +15,120 @@ import '../utiles/textstyles.dart';
 import 'branchwiseSaled.dart';
 
 class BranchWiseView extends StatefulWidget {
-  var saleData;
-  var branchData;
-  var profitData;
-  BranchWiseView(
-      {super.key,
-      required this.saleData,
-      required this.branchData,
-      required this.profitData});
+  BranchWiseView({
+    super.key,
+  });
 
   @override
   State<BranchWiseView> createState() => _BranchWiseViewState();
 }
 
 class _BranchWiseViewState extends State<BranchWiseView> {
-  late List SalesData;
-  late List ProfileData;
-  late List BranchData;
+  late List<Sales> SalesData;
+  late List<Profit> ProfileData;
+  late List<Branches> BranchData;
   int branchWiseController = 0;
 
   @override
   void initState() {
     // TODO: implement initState
-    SalesData = widget.saleData;
-    ProfileData = widget.profitData;
-    BranchData = widget.branchData;
+    SalesData = ctrl.SalesData!.data!.sales!;
+    ProfileData = ctrl.SalesData!.data!.profit!;
+    BranchData = ctrl.SalesData!.data!.branches!;
     super.initState();
+    loadNotifier();
+  }
+
+  SortAlphabetically() {
+    setState(() {
+      if (!ctrl.sortBranch) {
+        for (int i = 0; i < ctrl.SalesData!.data!.branches!.length - 1; i++) {
+          if (ctrl.SalesData!.data!.branches![i].branch!
+                  .compareTo(ctrl.SalesData!.data!.branches![i + 1].branch!) >
+              0) {
+            var temp = ctrl.SalesData!.data!.branches![i + 1];
+            ctrl.SalesData!.data!.branches![i + 1] =
+                ctrl.SalesData!.data!.branches![i];
+            ctrl.SalesData!.data!.branches![i] = temp;
+
+            var tm = ctrl.SalesData!.data!.sales![i + 1];
+            ctrl.SalesData!.data!.sales![i + 1] =
+                ctrl.SalesData!.data!.sales![i];
+            ctrl.SalesData!.data!.sales![i] = tm;
+
+            var tm2 = ctrl.SalesData!.data!.profit![i + 1];
+            ctrl.SalesData!.data!.profit![i + 1] =
+                ctrl.SalesData!.data!.profit![i];
+            ctrl.SalesData!.data!.profit![i] = tm2;
+          }
+        }
+        ctrl.sortBranch = true;
+      } else {
+        for (int i = 0; i < ctrl.SalesData!.data!.branches!.length - 1; i++) {
+          if (ctrl.SalesData!.data!.sales![i].totalSales!
+                  .compareTo(ctrl.SalesData!.data!.sales![i + 1].totalSales!) <
+              0) {
+            var temp = ctrl.SalesData!.data!.branches![i + 1];
+            ctrl.SalesData!.data!.branches![i + 1] =
+                ctrl.SalesData!.data!.branches![i];
+            ctrl.SalesData!.data!.branches![i] = temp;
+
+            var tm = ctrl.SalesData!.data!.sales![i + 1];
+            ctrl.SalesData!.data!.sales![i + 1] =
+                ctrl.SalesData!.data!.sales![i];
+            ctrl.SalesData!.data!.sales![i] = tm;
+
+            var tm2 = ctrl.SalesData!.data!.profit![i + 1];
+            ctrl.SalesData!.data!.profit![i + 1] =
+                ctrl.SalesData!.data!.profit![i];
+            ctrl.SalesData!.data!.profit![i] = tm2;
+          }
+        }
+        ctrl.sortBranch = false;
+      }
+    });
+  }
+
+  loadNotifier() {
+    ctrl.SortNotifier.addListener(() {
+      SortAlphabetically();
+    });
   }
 
   String SearchText = "";
-
+  Controller ctrl = Get.put(Controller());
   @override
   Widget build(BuildContext context) {
     int totalProfits = (ProfileData.isNotEmpty)
-        ? ProfileData[ProfileData.length - 1]["totalProfit"]
+        ? ProfileData[ProfileData.length - 1].totalProfit!
         : 0;
     int totalSales = (ProfileData.isNotEmpty)
-        ? SalesData[SalesData.length - 1]["totalSales"]
+        ? SalesData[SalesData.length - 1].totalSales!
         : 0;
+
+    SalesData = ctrl.SalesData!.data!.sales!;
+    ProfileData = ctrl.SalesData!.data!.profit!;
+    BranchData = ctrl.SalesData!.data!.branches!;
     return Column(
       children: [
         Container(
-          height: 45,
+          height: 5.29.h,
           width: double.infinity,
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 1),
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          margin: EdgeInsets.symmetric(horizontal: 4.2.w, vertical: 1.1.h),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Color(0xff767680).withOpacity(.12)),
           child: Row(
             children: [
-              width(8),
+              width(2.1.w),
               Icon(
                 Icons.search,
                 size: 22,
                 color: Color(0xff3C3C43),
               ),
-              width(6),
+              width(1.8.w),
               Expanded(
                 child: TextField(
                     textAlignVertical: TextAlignVertical.center,
@@ -92,15 +154,15 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                 size: 22,
                 color: Color(0xff3C3C43),
               ),
-              width(8),
+              width(2.1.w),
             ],
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          margin: EdgeInsets.symmetric(horizontal: 4.2.w, vertical: .95.h),
           width: double.infinity,
           padding: EdgeInsets.all(2),
-          height: 40,
+          height: 4.7.h,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Color(0xff767680).withOpacity(.12)),
@@ -114,8 +176,8 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                   });
                 },
                 child: Container(
-                  height: 30,
-                  width: 170,
+                  height: 3.5.h,
+                  width: 44.7.w,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -132,8 +194,8 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                   });
                 },
                 child: Container(
-                  height: 30,
-                  width: 170,
+                  height: 3.5.h,
+                  width: 45.5.w,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
@@ -146,10 +208,10 @@ class _BranchWiseViewState extends State<BranchWiseView> {
             ],
           ),
         ),
-        height(20),
+        height(2.3.h),
         if (SearchText == "")
           Container(
-            height: 150,
+            height: 17.64.h,
             child: Stack(
               children: [
                 Positioned(
@@ -166,7 +228,7 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                               for (int i = 0; i < BranchData.length; i++)
                                 PieChartSectionData(
                                   value: double.parse(
-                                          SalesData[i]["totalSales"].toString())
+                                          SalesData[i].totalSales.toString())
                                       .toDouble(),
                                   radius: 30,
                                   showTitle: false,
@@ -176,9 +238,8 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                                 SalesData.isNotEmpty)
                               for (int i = 0; i < BranchData.length; i++)
                                 PieChartSectionData(
-                                  value: double.parse(ProfileData[i]
-                                              ["totalProfit"]
-                                          .toString())
+                                  value: double.parse(
+                                          ProfileData[i].totalProfit.toString())
                                       .toDouble(),
                                   radius: 30,
                                   showTitle: false,
@@ -211,24 +272,33 @@ class _BranchWiseViewState extends State<BranchWiseView> {
         if (SearchText == "")
           Column(
             children: [
-              height(30),
+              height(3.5.h),
               if (branchWiseController == 0)
                 tx700(ToFixed(totalSales), size: 22, color: Colors.black),
               if (branchWiseController == 1)
                 tx700(ToFixed(totalProfits), size: 22, color: Colors.black),
-              height(8),
+              height(.95.h),
               if (branchWiseController == 0)
-                tx500("Today's sale - All Branches",
-                    size: 13, color: Colors.black),
+                tx500(
+                    ctrl.SelectedBranch.isNotEmpty
+                        ? "Sales - ${StringtoFormate(ctrl.SelectedBranch!.first!.branch!)}"
+                        : "Sales -  All Branch",
+                    size: 13,
+                    color: Colors.black),
               if (branchWiseController == 1)
-                tx500("Today's profit - All Branches",
-                    size: 13, color: Colors.black),
-              height(22),
+                tx500(
+                    ctrl.SelectedBranch.isNotEmpty
+                        ? "Profit - ${StringtoFormate(ctrl.SelectedBranch!.first!.branch!)}"
+                        : "Profit -  All Branch",
+                    size: 13,
+                    color: Colors.black),
+              height(2.5.h),
             ],
           ),
         if (branchWiseController == 0)
           for (int i = 0; i < BranchData.length; i++)
-            if (BranchData[i]["branch"]
+            if (BranchData[i]
+                    .branch
                     .toString()
                     .toUpperCase()
                     .contains(SearchText.toUpperCase()) ||
@@ -236,12 +306,13 @@ class _BranchWiseViewState extends State<BranchWiseView> {
               BranchWiseSales(
                 color: ColorList[i % 4],
                 BranchData: BranchData[i],
-                Amountdata: SalesData[i],
+                sale: SalesData[i],
                 isSale: true,
               ),
         if (branchWiseController == 1)
           for (int i = 0; i < BranchData.length; i++)
-            if (BranchData[i]["branch"]
+            if (BranchData[i]
+                    .branch
                     .toString()
                     .toUpperCase()
                     .contains(SearchText.toUpperCase()) ||
@@ -252,6 +323,7 @@ class _BranchWiseViewState extends State<BranchWiseView> {
                 Amountdata: ProfileData[i],
                 isSale: false,
               ),
+        height(2.3.h),
       ],
     );
   }

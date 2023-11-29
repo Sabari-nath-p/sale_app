@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:seematti/MVC/Controller.dart';
+import 'package:seematti/MVC/SaleDataModel.dart';
 import 'package:seematti/components/salesdetailscard.dart';
+import 'package:seematti/screen/Dashboard/views/SalesHome.dart';
 import 'package:seematti/utiles/colors.dart';
+import 'package:sizer/sizer.dart';
 
 import '../utiles/functionSupporter.dart';
 import '../utiles/sizer.dart';
 import '../utiles/textstyles.dart';
 
 class SaleDataView extends StatefulWidget {
-  var salesDetails;
-  SaleDataView({super.key, required this.salesDetails});
+  SaleDataView({super.key});
 
   @override
   State<SaleDataView> createState() => _SaleDataViewState();
@@ -20,8 +24,8 @@ class _SaleDataViewState extends State<SaleDataView> {
 
   Calculatetotal() {
     setState(() {
-      for (var data in widget.salesDetails) {
-        total = total + int.parse(data["netSaleAmount"].toString());
+      for (var data in ctrl.SalesData!.data!.salesDetails!) {
+        total = total + int.parse(data.netSaleAmount.toString());
       }
     });
   }
@@ -29,20 +33,44 @@ class _SaleDataViewState extends State<SaleDataView> {
   @override
   void initState() {
     // TODO: implement initState
+    tempList = ctrl.SalesData!.data!.salesDetails!;
     super.initState();
+
     Calculatetotal();
+    loadNotifier();
+    //sortAlphabetial();
   }
 
+  List<SalesDetails> tempList = [];
+  bool IsSorted = false;
+  sortAlphabetial() {
+    ctrl.sortSales();
+    // if (!IsSorted)
+    //   tempList.sort((a, b) => a.item!.compareTo(b.item!));
+    // else {
+    //   tempList = ctrl.SalesData!.data!.salesDetails!;
+    // }
+    // IsSorted = !IsSorted;
+    // setState(() {});
+  }
+
+  loadNotifier() async {
+    ctrl.SortNotifier.addListener(() {
+      sortAlphabetial();
+    });
+  }
+
+  Controller ctrl = Get.put(Controller());
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Container(
-          height: 45,
+          height: 5.29.h,
           width: double.infinity,
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(horizontal: 0),
-          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          margin: EdgeInsets.symmetric(horizontal: 4.2.w, vertical: 1.1.h),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: Color(0xff767680).withOpacity(.12)),
@@ -79,24 +107,30 @@ class _SaleDataViewState extends State<SaleDataView> {
             ],
           ),
         ),
-        if (searchText == "") height(22),
+        if (searchText == "") height(2.5.h),
         if (searchText == "")
           tx700("${ToFixed(total)}", size: 24, color: Colors.black),
         height(4),
         if (searchText == "")
-          tx500("Today’s Sales Details - All Branch",
-              size: 13, color: Colors.black),
+          tx500(
+              ctrl.SelectedBranch.isNotEmpty
+                  ? "Sales Details - ${StringtoFormate(ctrl.SelectedBranch!.first!.branch!)}"
+                  : "Sales Details -  All Branch",
+              size: 13,
+              color: Colors.black),
         height(10),
-        for (var data in widget.salesDetails)
-          if (data["item"]
+        for (var data in tempList)
+          if (data.item!
                   .toString()
                   .toUpperCase()
                   .contains(searchText.toUpperCase()) ||
               searchText == "")
             SalesDetialCard(
-              color: ColorList[widget.salesDetails.indexOf(data) % 4],
+              color: ColorList[
+                  ctrl.SalesData!.data!.salesDetails!.indexOf(data) % 4],
               data: data,
             ),
+        height(2.35.h),
       ],
     );
   }

@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:seematti/MVC/Controller.dart';
 import 'package:seematti/screen/Dashboard/HomeMain.dart';
 import 'package:seematti/screen/WelcomeScreen.dart';
 import 'package:seematti/utiles/sizer.dart';
@@ -27,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // String log = pref.getString("LOGIN").toString();
     Future.delayed(Duration(seconds: 2));
     // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => HomeMain()));
-    // //noprint(log);
+    // //no////print(log);
     // if (log == "null") {
     //   ScreenChanger(context, WelcomeScreen());
     // } else {}
@@ -38,95 +40,13 @@ class _SplashScreenState extends State<SplashScreen> {
   List BranchList = [];
   String selectedBranch = "";
 
-  loadCompany() async {
-    print(userid);
-    final Respones = await http.post(Uri.parse("$baseurl/v1/company/dropdown"),
-        body: json.encode({"userID": "$userid"}),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token'
-        });
-    print("Working");
-    print(Respones.body);
-    print("Working 1");
-    if (Respones.statusCode == 200) {
-      var js = json.decode(Respones.body);
-      if (js["success"]) {
-        setState(() {
-          CompanyList = js["data"];
-          if (CompanyList.isNotEmpty) {
-            selectedCompany = js["data"][0]["company"];
-            loadBranch(js["data"][0]["companyID"]);
-          }
-        });
-      }
-    }
-  }
-
-  loadBranch(int id) async {
-    print(id);
-    final Respones = await http.post(Uri.parse("$baseurl/v1/branch/dropdown"),
-        body: json.encode({"userID": "$userid", "companyID": id}),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token'
-        });
-    print(Respones.body);
-    if (Respones.statusCode == 200) {
-      var js = json.decode(Respones.body);
-      if (js["success"] && js["success"] != null) {
-        setState(() {
-          BranchList = js["data"];
-          if (BranchList.isNotEmpty) {
-            selectedBranch = js["data"][0]["branch"];
-            loadSalesData();
-          }
-        });
-      }
-    }
-  }
-
-  List BranchIDlist() {
-    List temp = [];
-    for (var data in BranchList) temp.add(data["branchID"]);
-    return temp;
-  }
-
-  final f = new DateFormat('dd/MM/yyyy');
-  loadSalesData() async {
-    final Response = await http.post(Uri.parse("$baseurl/v1/mis/dashboard"),
-        body: json.encode({
-          "branchID": BranchIDlist(),
-          "userID": "$userid",
-          "startDate": "31/07/2023", //f.format(DateTime.now()),
-          "endDate": f.format(DateTime.now()),
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token'
-        });
-    print(Response.body);
-    //noprint(Response.statusCode);
-    //noprint(Response.body);
-    if (Response.statusCode == 200) {
-      var js = json.decode(Response.body);
-      if (js["success"]) {
-        Navigator.of(context).pop();
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => HomeMain(
-                Salesdata: js["data"],
-                branchList: BranchList,
-                companyList: CompanyList)));
-      }
-    }
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadCompany();
   }
+
+  Controller ctrl = Get.put(Controller());
 
   @override
   Widget build(BuildContext context) {

@@ -1,15 +1,21 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:seematti/constants/stringData.dart';
+import 'package:seematti/firebase_options.dart';
 import 'package:seematti/screen/Dashboard/HomeMain.dart';
 import 'package:seematti/screen/WelcomeScreen.dart';
 import 'package:seematti/screen/loginScreen.dart';
 import 'package:seematti/screen/splashScreen.dart';
+import 'package:seematti/utiles/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:sizer/sizer.dart';
 
 var UserData;
 String login = "";
@@ -18,12 +24,32 @@ String userid = "";
 String token = "";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  
+
   SharedPreferences preferences = await SharedPreferences.getInstance();
   login = preferences.getString("LOGIN").toString();
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
 
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: true,
+    sound: true,
+  );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
   if (login == "IN") {
     token = preferences.getString("TOKEN").toString();
     userid = preferences.getString("USERID").toString();
@@ -38,7 +64,7 @@ void main() async {
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
       UserData = js["data"][0];
-      print(UserData);
+      ////print(UserData);
       isok = 1;
     } else if (Response.statusCode == 401) {
       isok = 2;
@@ -55,13 +81,20 @@ class seematti extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      // home: WelcomeScreen(),
-      home: (isok == 1)
-          ? SplashScreen()
-          : (isok == 2)
-              ? LoginScreen()
-              : WelcomeScreen(),
-    );
+    return Sizer(builder: (context, Orientation, DeviceType) {
+      return GetMaterialApp(
+        // home: HomeMain(
+        theme: ThemeData(primaryColor: primaryColor),
+        //   branchList: [],
+        //   Salesdata: "data",
+        //   companyList: [],
+        // ),
+        home: (isok == 1)
+            ? SplashScreen()
+            : (isok == 2)
+                ? LoginScreen()
+                : WelcomeScreen(),
+      );
+    });
   }
 }

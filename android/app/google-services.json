@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "667951370234",
+    "project_id": "mretail-seematti-misapp",
+    "storage_bucket": "mretail-seematti-misapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667951370234:android:fecd360c99f94b40041e43",
+        "android_client_info": {
+          "package_name": "com.seematti.sale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "667951370234-dihka05lk2snedr5ch49blnrc9i1fh1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFoZ24LxNMWJY8I2o8zWnl7mVgYIz1tPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "667951370234-dihka05lk2snedr5ch49blnrc9i1fh1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667951370234:android:931063396d6e8f90041e43",
+        "android_client_info": {
+          "package_name": "mretail.seemattiMISApp.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "667951370234-dihka05lk2snedr5ch49blnrc9i1fh1u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFoZ24LxNMWJY8I2o8zWnl7mVgYIz1tPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "667951370234-dihka05lk2snedr5ch49blnrc9i1fh1u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

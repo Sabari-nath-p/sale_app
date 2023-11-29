@@ -1,4 +1,6 @@
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:flutter/material.dart';
+import 'package:seematti/screen/Dashboard/HomeMain.dart';
 
 import '../../../utiles/sizer.dart';
 import '../../../utiles/textstyles.dart';
@@ -12,6 +14,25 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    BackButtonInterceptor.add(myInterceptor, zIndex: 1, name: "Notifications");
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    notifier.value++;
+
+    return true;
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.removeByName("Notifications");
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

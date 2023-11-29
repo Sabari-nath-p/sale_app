@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:seematti/MVC/SaleDataModel.dart';
 import 'package:seematti/utiles/functionSupporter.dart';
 import 'package:seematti/utiles/sizer.dart';
 import 'package:seematti/utiles/textstyles.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
+import 'package:sizer/sizer.dart';
 
 class SalesDetialCard extends StatefulWidget {
   Color color;
-  var data;
+  SalesDetails data;
   SalesDetialCard({super.key, required this.color, required this.data});
 
   @override
@@ -18,12 +20,12 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
   @override
   Widget build(BuildContext context) {
     double precentage = 0;
-    precentage = (widget.data["netSalePerc"] * 3.24);
+    precentage = (widget.data.netSalePerc! * .87.w);
     return AnimatedContainer(
-      height: (isExpanded) ? 220 : 130,
+      height: (isExpanded) ? 25.8.h : 15.29.h,
       curve: Curves.easeIn,
       duration: const Duration(milliseconds: 100),
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+      margin: EdgeInsets.symmetric(horizontal: 4.2.w, vertical: .7.h),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -40,7 +42,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
           Row(
             children: [
               Expanded(
-                child: tx500(StringtoFormate("${widget.data["item"]}"),
+                child: tx500(StringtoFormate("${widget.data.item}"),
                     color: Colors.black, size: 14),
               ),
               InkWell(
@@ -50,8 +52,8 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                   });
                 },
                 child: Container(
-                    width: 25,
-                    height: 25,
+                    width: 6.57.w,
+                    height: 6.57.w,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7),
                         color: (isExpanded)
@@ -77,17 +79,17 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
           ),
           Row(
             children: [
-              tx700("${ToFixed(widget.data["netSaleAmount"])}",
+              tx700("${ToFixed(widget.data.netSaleAmount)}",
                   color: Colors.black, size: 18),
               Expanded(child: Container()),
-              tx700("${widget.data["netSalePerc"]}%",
+              tx700("${widget.data.netSalePerc}%",
                   size: 18, color: widget.color)
             ],
           ),
-          height(13),
+          height(1.5.h),
           Container(
               height: 7,
-              width: 328,
+              width: 86.31.w,
               alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -113,7 +115,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          tx600("${ToFixed(widget.data["discountAmount"])}",
+                          tx600("${ToFixed(widget.data.discountAmount)}",
                               size: 16, color: Colors.black),
                           tx400("Discount Amount",
                               size: 10, color: Colors.black)
@@ -124,7 +126,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          tx600("${ToFixed(widget.data["returnAmount"])}",
+                          tx600("${ToFixed(widget.data.returnAmount)}",
                               size: 16, color: Colors.black),
                           tx400("Return Amount", size: 10, color: Colors.black)
                         ],
@@ -139,7 +141,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          tx600("${ToFixed(widget.data["taxAmount"])}",
+                          tx600("${ToFixed(widget.data.taxAmount)}",
                               size: 16, color: Colors.black),
                           tx400("Tax Amount", size: 10, color: Colors.black)
                         ],
@@ -149,7 +151,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          tx600("${widget.data["totalPieces"]}",
+                          tx600("${widget.data.totalPieces}",
                               size: 16, color: Colors.black),
                           tx400("Total Pieces", size: 10, color: Colors.black)
                         ],

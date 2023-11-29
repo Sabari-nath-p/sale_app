@@ -3,16 +3,12 @@ import 'package:seematti/screen/Dashboard/views/SalesHome.dart';
 import 'package:seematti/screen/Dashboard/views/notification.dart';
 import 'package:seematti/screen/Dashboard/views/settingsView.dart';
 import 'package:seematti/utiles/colors.dart';
-
+import 'package:sizer/sizer.dart';
+ValueNotifier notifier = ValueNotifier(10);
 class HomeMain extends StatefulWidget {
-  List companyList;
-  List branchList;
-  var Salesdata;
-  HomeMain(
-      {super.key,
-      required this.Salesdata,
-      required this.branchList,
-      required this.companyList});
+  HomeMain({
+    super.key,
+  });
 
   @override
   State<HomeMain> createState() => _HomeMainState();
@@ -21,7 +17,7 @@ class HomeMain extends StatefulWidget {
 class _HomeMainState extends State<HomeMain> {
   int bottomIndex = 0;
 
-  ValueNotifier notifier = ValueNotifier(10);
+  
   loadNotifier() async {
     notifier.addListener(() {
       setState(() {
@@ -55,8 +51,8 @@ class _HomeMainState extends State<HomeMain> {
             items: [
               BottomNavigationBarItem(
                   icon: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 10.5.w,
+                      height: 10.5.w,
                       child: Image.asset(
                         "assets/icons/sales.png",
                         color:
@@ -65,8 +61,8 @@ class _HomeMainState extends State<HomeMain> {
                   label: "Sales"),
               BottomNavigationBarItem(
                 icon: SizedBox(
-                    width: 40,
-                    height: 40,
+                    width: 10.5.w,
+                    height: 4.7.h,
                     child: Image.asset(
                       "assets/icons/setting.png",
                       color: (bottomIndex == 1) ? primaryColor : Colors.black87,
@@ -75,8 +71,8 @@ class _HomeMainState extends State<HomeMain> {
               ),
               BottomNavigationBarItem(
                   icon: SizedBox(
-                      width: 40,
-                      height: 40,
+                      width: 4.7.h,
+                      height: 4.7.h,
                       child: Image.asset(
                         "assets/icons/notification.png",
                         color:
@@ -86,10 +82,7 @@ class _HomeMainState extends State<HomeMain> {
             ],
           ),
           body: (bottomIndex == 0)
-              ? ScalesHome(
-                  clist: widget.companyList,
-                  blist: widget.branchList,
-                  SalesData: widget.Salesdata)
+              ? ScalesHome()
               //  if (bottomIndex == 2)
               : (bottomIndex == 1)
                   ? settingView(

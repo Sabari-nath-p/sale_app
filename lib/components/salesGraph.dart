@@ -1,13 +1,19 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:seematti/MVC/Controller.dart';
+import 'package:seematti/screen/Dashboard/views/SalesHome.dart';
 
+import '../screen/Dashboard/HomeMain.dart';
 import '../utiles/colors.dart';
 import '../utiles/functionSupporter.dart';
 import '../utiles/textstyles.dart';
 
 class SalesGraph extends StatefulWidget {
-  List salesGraphData;
-  SalesGraph({super.key, required this.salesGraphData});
+  SalesGraph({
+    super.key,
+  });
 
   @override
   State<SalesGraph> createState() => _SalesGraphState();
@@ -16,127 +22,146 @@ class SalesGraph extends StatefulWidget {
 class _SalesGraphState extends State<SalesGraph> {
   double highSale = 0;
   double lastSale = 0;
-  loadData() {
-    for (var data in widget.salesGraphData)
-      if (highSale < int.parse(data["netSaleAmount"].toString()).toDouble()) {
-        setState(() {
-          highSale = int.parse(data["netSaleAmount"].toString()).toDouble();
-        });
-      }
-    highSale = highSale + highSale * 40 / 100;
-    //  if (widget.salesGraphData.isNotEmpty) {
-    double temp = int.parse(widget
-            .salesGraphData[widget.salesGraphData.length - 1]["netSaleAmount"]
-            .toString())
-        .toDouble();
-    lastSale = (temp - temp * 20 / 100).toDouble();
-    // }
-  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadData();
+    // loadData();
 
-    //noprint(highSale);
+    // loadNotifier();
+
+    //no////print(highSale);
   }
 
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    loadData();
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   // loadData();
+  //   //print("working");
+  // }
 
   bool checkDecimal(double value) {
     String temp = value.toString();
     List tm = temp.split(".");
-    //noprint(tm[1]);
+    //no////print(tm[1]);
     if (tm[1] == '5') {
       return false;
     } else
       return true;
   }
 
+  Controller ctrl = Get.put(Controller());
   @override
   Widget build(BuildContext context) {
-    return LineChart(LineChartData(
-        minX: 0,
-        maxX: widget.salesGraphData.length.toDouble(),
-        minY: 0,
-        maxY: highSale,
-        // maxX: 5,
-        titlesData: FlTitlesData(
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            bottomTitles: AxisTitles(
-                drawBelowEverything: false,
-                sideTitles: SideTitles(
-                    getTitlesWidget: (value, meta) => tx500(
-                        (checkDecimal(value))
-                            ? ""
-                            : (widget.salesGraphData.length >
-                                    (value - .5).toInt())
-                                ? StringtoFormate(
-                                    widget.salesGraphData[(value - .5).toInt()]
-                                        ["item"])
-                                : "",
-                        size: 12),
-                    interval: .5,
-                    showTitles: true))),
-        borderData: FlBorderData(show: false),
-        lineBarsData: [
-          LineChartBarData(
-            spots: [
-              FlSpot(0, 0),
-              for (int i = 0; i < widget.salesGraphData.length; i++)
-                FlSpot(
-                    i + .5,
-                    int.parse(widget.salesGraphData[i]["netSaleAmount"]
-                            .toString())
-                        .toDouble()),
-              //  /   FlSpot(1, 850),
-              FlSpot(widget.salesGraphData.length.toDouble(), lastSale)
-              // FlSpot(2, 1500),
-              // FlSpot(3, 900),
-              // FlSpot(4, 1300),
-              // FlSpot(5, 700)
-            ],
-            isCurved: true,
-            color: primaryColor,
-            belowBarData: BarAreaData(
-              show: true,
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  primaryColor,
-                  primaryColor,
-                  primaryColor.withOpacity(.9),
-                  primaryColor.withOpacity(.8),
-                  primaryColor.withOpacity(.7),
-                  primaryColor.withOpacity(
-                    .5,
-                  ),
-                  primaryColor.withOpacity(
-                    .4,
-                  ),
-                  primaryColor.withOpacity(
-                    .3,
-                  ),
-                  primaryColor.withOpacity(
-                    .2,
-                  ),
-                  primaryColor.withOpacity(
-                    .1,
-                  ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        constraints: BoxConstraints(
+            minWidth: 338,
+            maxWidth: (ctrl.SalesData!.data!.salesDetails!.length < 4)
+                ? 340
+                : (90 * ctrl.SalesData!.data!.salesDetails!.length).toDouble() +
+                    10),
+        child: LineChart(LineChartData(
+            minX: 0,
+            // maxX: widget.salesGraphData.length.toDouble(),
+            minY: 0,
+            //  maxY: highSale,
+            // maxX: 5,
+            titlesData: FlTitlesData(
+                //  show: false,
+                leftTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                rightTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles:
+                    AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                    //  drawBelowEverything: false,
+                    sideTitles: SideTitles(
+                        getTitlesWidget: (value, meta) => tx500(
+                            (checkDecimal(value))
+                                ? ""
+                                : (ctrl.SalesData!.data!.salesDetails!.length >
+                                        (value - .5).toInt())
+                                    ? StringtoFormate(ctrl
+                                        .SalesData!
+                                        .data!
+                                        .salesDetails![(value - .5).toInt()]
+                                        .item!)
+                                    : "",
+                            size: 12),
+                        interval: .5,
+                        showTitles: true))),
+            borderData: FlBorderData(show: false),
+            lineBarsData: [
+              LineChartBarData(
+                preventCurveOverShooting: true,
+                spots: [
+                  FlSpot(0, 0),
+                  for (int i = 0;
+                      i < ctrl.SalesData!.data!.salesDetails!.length;
+                      i++)
+                    FlSpot(
+                        i + .5,
+                        int.parse(ctrl
+                                .SalesData!.data!.salesDetails![i].netSaleAmount
+                                .toString())
+                            .toDouble()),
+                  //  FlSpot(1, 850),
+                  FlSpot(
+                      ctrl.SalesData!.data!.salesDetails!.length.toDouble(),
+                      int.parse(ctrl
+                              .SalesData!
+                              .data!
+                              .salesDetails![
+                                  ctrl.SalesData!.data!.salesDetails!.length -
+                                      1]
+                              .netSaleAmount
+                              .toString())
+                          .toDouble()),
+                  // FlSpot(2, 1500),
+                  // FlSpot(3, 900),
+                  // FlSpot(4, 1300),
+                  // FlSpot(5, 700)
                 ],
-              ),
-            ),
-          )
-        ],
-        gridData: FlGridData(show: false)));
+                isCurved: true,
+                color: primaryColor,
+                belowBarData: BarAreaData(
+                  show: true,
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      primaryColor,
+                      primaryColor,
+                      primaryColor.withOpacity(.9),
+                      primaryColor.withOpacity(.8),
+                      primaryColor.withOpacity(.7),
+                      primaryColor.withOpacity(
+                        .5,
+                      ),
+                      primaryColor.withOpacity(
+                        .4,
+                      ),
+                      primaryColor.withOpacity(
+                        .3,
+                      ),
+                      primaryColor.withOpacity(
+                        .2,
+                      ),
+                      primaryColor.withOpacity(
+                        .1,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+            gridData: FlGridData(show: false))),
+      ),
+    );
   }
 }

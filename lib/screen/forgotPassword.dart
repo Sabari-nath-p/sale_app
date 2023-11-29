@@ -39,7 +39,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         body: json.encode({
           "email": widget.userid,
         }));
-    print(Response.body);
+    ////print(Response.body);
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
 
@@ -142,7 +142,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                       Duration(seconds: time.round()))),
                               interval: Duration(milliseconds: 100),
                               onFinished: () {
-                                // //noprint('Timer is done!');
+                                // //no////print('Timer is done!');
                                 setState(() {
                                   isResendReady = true;
                                 });
@@ -159,7 +159,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 InkWell(
                                   onTap: () {
                                     if (isResendReady) {
-                                      print("working");
+                                      ////print("working");
                                       sentOtp();
                                       setState(() {
                                         countdownController.restart();
@@ -387,7 +387,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           'Content-Type': 'application/json',
         },
         body: json.encode({"email": widget.userid, "otp": "$otp"}));
-    print(Response.body);
+    ////print(Response.body);
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
       if (js["success"] == true && js["success"] != null) {
@@ -423,7 +423,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           "resetPasswordCode": resetPasswordCode,
           "newPassword": newPass.text.trim()
         }));
-    print(Response.body);
+    ////print(Response.body);
     if (Response.statusCode == 200) {
       var js = json.decode(Response.body);
       if (js["success"] == true && js["success"] != null) {

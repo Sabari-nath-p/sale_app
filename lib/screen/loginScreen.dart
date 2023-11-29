@@ -13,6 +13,7 @@ import 'package:seematti/utiles/sizer.dart';
 import 'package:seematti/utiles/textstyles.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizer/sizer.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -36,12 +37,25 @@ class _LoginScreenState extends State<LoginScreen> {
     // TODO: implement initState
     super.initState();
     loadStartup();
+    loadRemember();
+  }
+
+  loadRemember() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String Remember = preferences.getString("REMEMBER").toString();
+    if (Remember == "TRUE") {
+      emailController.text = preferences.getString("EMAIL").toString();
+      passwordController.text = preferences.getString("PASSWORD").toString();
+      setState(() {
+        isReady = true;
+      });
+    }
   }
 
   loadStartup() async {
     await Future.delayed(Duration(seconds: 1));
     setState(() {
-      size = MediaQuery.of(context).size.height - 135;
+      size = MediaQuery.of(context).size.height - 15.88.h;
       isAnimated = true;
     });
     await Future.delayed(Duration(milliseconds: 680));
@@ -61,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Positioned(
                 top: 0,
-                bottom: 0,
+                // bottom: 0,
                 left: 0,
                 right: 0,
                 child: Container(
@@ -80,12 +94,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 )),
             Positioned(
-              top: 50,
-              left: 40,
+              top: 5.8.h,
+              left: 10.5.w,
               child: AnimatedContainer(
                   curve: Curves.decelerate,
                   duration: Duration(seconds: 3),
-                  width: (!isAnimated) ? 0 : 309,
+                  width: (!isAnimated) ? 0 : 81.3.w,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -96,8 +110,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             size: 25,
                             textAlign: TextAlign.center),
                         Container(
-                          width: 100,
-                          height: 30,
+                          width: 26.31.w,
+                          height: 3.5.h,
                           margin: EdgeInsets.only(top: 4),
                           child: Stack(
                             children: [
@@ -132,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Positioned(
                 // top: size,
-                top: (!isAnimationCompleted) ? null : 135,
+                top: (!isAnimationCompleted) ? null : 15.88.h,
                 left: 0,
                 right: 0,
                 bottom: 0,
@@ -140,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: (!isAnimated) ? 0 : density(size),
                   duration: Duration(milliseconds: 800),
                   curve: Curves.decelerate,
-                  padding: EdgeInsets.symmetric(horizontal: 30),
+                  padding: EdgeInsets.symmetric(horizontal: 7.8.w),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -151,12 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 2.5.w),
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                height(40),
+                                height(4.7.h),
                                 tx700("Welcome", size: 22, color: Colors.black),
                                 height(11),
                                 Wrap(
@@ -167,12 +181,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         color: Colors.black, size: 14),
                                   ],
                                 ),
-                                height(50),
+                                height(5.8.h),
                                 tx400("Mobile / Email",
                                     size: 14, color: Color(0xff323030)),
                                 height(11),
                                 Container(
-                                  height: 50,
+                                  height: 5.8.h,
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 8),
@@ -200,12 +214,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         isDense: true),
                                   ),
                                 ),
-                                height(17),
+                                height(2.h),
                                 tx400("Password",
                                     size: 14, color: Color(0xff323030)),
                                 height(11),
                                 Container(
-                                  height: 50,
+                                  height: 5.8.h,
                                   alignment: Alignment.center,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12, vertical: 8),
@@ -339,19 +353,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                       "AppID": "S01",
                                     });
 
-                                //noprint(Response.body);
-                                //noprint(Response.statusCode);
-                                print("working");
+                                //no////print(Response.body);
+                                //no////print(Response.statusCode);
+                                ////print("working");
 
-                                print(Response.body);
+                                ////print(Response.body);
                                 if (Response.statusCode == 200) {
                                   var res = json.decode(Response.body);
 
                                   if (res["success"] &&
                                       res["success"] != null) {
-                                    //noprint(res);
-                                    print(Response.body);
-                                    print(Response.body);
+                                    //no////print(res);
+                                    ////print(Response.body);
+                                    ////print(Response.body);
                                     SharedPreferences pref =
                                         await SharedPreferences.getInstance();
                                     pref.setString("USER", Response.body);
@@ -369,22 +383,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                           'Content-Type': 'application/json',
                                           'Authorization': 'Bearer $token'
                                         });
-                                    print(pp.body);
+                                    ////print(pp.body);
                                     if (pp.statusCode == 200) {
                                       var js = json.decode(pp.body);
                                       UserData = js["data"][0];
                                     }
-                                    if (isRemember)
-                                      pref.setString("LOGIN", "IN");
-                                    else
-                                      pref.setString("LOGIN", "SKIP");
+                                    pref.setString("LOGIN", "IN");
+                                    if (isRemember) {
+                                      pref.setString(
+                                          "EMAIL", emailController.text.trim());
+                                      pref.setString("PASSWORD",
+                                          passwordController.text.trim());
+
+                                      pref.setString("REMEMBER", "TRUE");
+                                    } else {
+                                      pref.setString("EMAIL", "");
+                                      pref.setString("PASSWORD", "");
+                                      pref.setString("REMEMBER", "FALSE");
+                                    }
+                                    //            pref.setString("LOGIN", "IN");
 
                                     while (Navigator.canPop(context))
                                       Navigator.pop(context);
                                     Navigator.pop(context);
                                     ScreenChanger(context, SplashScreen());
                                   } else {
-                                    //noprint("working");
+                                    //no////print("working");
                                     setState(() {
                                       isLoading = false;
                                     });
@@ -434,7 +458,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 size: 14,
                                 textAlign: TextAlign.center,
                                 color: Colors.black)),
-                        height(140),
+                        height(16.4.h),
                         Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.only(bottom: 30),

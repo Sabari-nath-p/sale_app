@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:seematti/MVC/SaleDataModel.dart';
 import 'package:sizer/sizer.dart';
 
-import '../utiles/functionSupporter.dart';
-import '../utiles/sizer.dart';
-import '../utiles/textstyles.dart';
+import '../../../utiles/functionSupporter.dart';
+import '../../../utiles/sizer.dart';
+import '../../../utiles/textstyles.dart';
 
 class BranchWiseSales extends StatelessWidget {
   Color color;
@@ -31,7 +31,7 @@ class BranchWiseSales extends StatelessWidget {
         ? (sale!.salesPercentage! * 3.24)
         : (Amountdata!.profitPercentage! * 3.24);
     return Container(
-      height: 14.11.h,
+      height: 15.11.h,
       margin: EdgeInsets.symmetric(horizontal: 4.2.w, vertical: .5.h),
       padding: EdgeInsets.all(4.2.w),
       decoration: BoxDecoration(

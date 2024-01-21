@@ -8,20 +8,18 @@ import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
-import 'package:multi_select_flutter/util/multi_select_list_type.dart';
 import 'package:multiselect/multiselect.dart';
+import 'package:multiselect_dropdown_flutter/multiselect_dropdown_flutter.dart';
+//import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:pinput/pinput.dart';
 import 'package:seematti/MVC/BranchModel.dart';
 import 'package:seematti/MVC/CompanyModel.dart';
 import 'package:seematti/MVC/Controller.dart';
-import 'package:seematti/components/SalesWiseData.dart';
-import 'package:seematti/components/branchwiseSaled.dart';
-import 'package:seematti/components/branchwiseView.dart';
-import 'package:seematti/components/salesGraph.dart';
-import 'package:seematti/components/salesdetailscard.dart';
-import 'package:seematti/constants/stringData.dart';
-import 'package:seematti/main.dart';
+import 'package:seematti/screen/Dashboard/components/SalesWiseData.dart';
+
+import 'package:seematti/screen/Dashboard/components/branchwiseView.dart';
+import 'package:seematti/screen/Dashboard/components/salesGraph.dart';
+
 import 'package:seematti/utiles/colors.dart';
 import 'package:seematti/utiles/dateConverter.dart';
 import 'package:sizer/sizer.dart';
@@ -30,6 +28,13 @@ import '../../../utiles/functionSupporter.dart';
 import '../../../utiles/sizer.dart';
 import '../../../utiles/textstyles.dart';
 import 'package:http/http.dart' as http;
+
+final List myList = const [
+  {'id': 'dog', 'label': 'Dog'},
+  {'id': 'cat', 'label': 'Cat'},
+  {'id': 'mouse', 'label': 'Mouse'},
+  {'id': 'rabbit', 'label': 'Rabbit'},
+];
 
 class ScalesHome extends StatefulWidget {
   ScalesHome({
@@ -59,7 +64,7 @@ class _ScalesHomeState extends State<ScalesHome> {
         backController = 0;
       });
     else {
-      print("workig");
+      //print("workig");
       exit(0);
     } // Do some stuff.
     return true;
@@ -75,10 +80,10 @@ class _ScalesHomeState extends State<ScalesHome> {
 
   @override
   Widget build(BuildContext context) {
-    // ////print(fromDate);
-    // ////print(ToDate);
+    // //////print(fromDate);
+    // //////print(ToDate);
 
-    ////print(synctime);
+    //////print(synctime);
     // if (ctrl.SalesData != null) SalesData = json.decode(ctrl.SalesData!.data!.toJson);
     return GetBuilder<Controller>(builder: (_) {
       String synctime = "";
@@ -131,7 +136,12 @@ class _ScalesHomeState extends State<ScalesHome> {
                         if (backController != 0)
                           InkWell(
                             onTap: () {
-                              ctrl.SortNotifier.value++;
+                              print(backController);
+                              if (backController == 1) {
+                                ctrl.sortSales();
+                              } else {
+                                ctrl.SortAlphabetically();
+                              }
                             },
                             child: SizedBox(
                               height: 3.5.h,
@@ -169,7 +179,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                                 children: [
                                   if (ctrl.SelectedCompany != null)
                                     Container(
-                                        width: 42.1.w,
+                                        width: 38.1.w,
                                         height: 4.9.h,
                                         alignment: Alignment.centerLeft,
                                         padding: EdgeInsets.symmetric(
@@ -227,96 +237,149 @@ class _ScalesHomeState extends State<ScalesHome> {
                                                 }).toList())),
                                   width(2.6.w),
                                   if (ctrl.SelectedBranch != null)
-                                    Container(
-                                        height: 4.9.h,
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                56.5.w,
-                                        alignment: Alignment.center,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 3.1.w, vertical: .9.h),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Color(0xff323030),
-                                                width: .6),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.white),
-                                        child: (ctrl.branchModel!.branch!
-                                                    .length ==
-                                                1)
-                                            ? tx500(
-                                                StringtoFormate("No Branches"),
-                                                size: 14,
-                                                color: Colors.black)
-                                            // : DropDownMultiSelect(
-                                            //     decoration: InputDecoration(
-                                            //       fillColor: Theme.of(context)
-                                            //           .colorScheme
-                                            //           .onPrimary,
-                                            //       focusColor: Theme.of(context)
-                                            //           .colorScheme
-                                            //           .onPrimary,
-                                            //       enabledBorder: const OutlineInputBorder(
-                                            //           borderRadius: BorderRadius.all(
-                                            //               Radius.circular(4)),
-                                            //           borderSide: BorderSide(
-                                            //               color: Colors.grey,
-                                            //               width: 1.5)),
-                                            //       focusedBorder: const OutlineInputBorder(
-                                            //           borderRadius: BorderRadius.all(
-                                            //               Radius.circular(4)),
-                                            //           borderSide: BorderSide(
-                                            //             color: Colors.blue,
-                                            //             width: 1.5,
-                                            //           )),
+                                    Expanded(
+                                      child: Container(
+                                          height: 4.9.h,
+                                          color: Colors.white,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              56.5.w,
+                                          child: MultiSelectDropdown.simpleList(
+                                            includeSelectAll: true,
+                                            numberOfItemsLabelToShow: 1,
+                                            whenEmpty: "Select Branches",
+                                            //   checkboxFillColor: Colors.white,
+                                            //  splashColor: Colors.red,
+                                            // checkboxFillColor:
+
+                                            //     Colors.transparent,
+                                            //isDense: true,
+                                            // icon: Padding(
+                                            //   padding:
+                                            //       EdgeInsets.only(top: 1.2.h),
+                                            //   child: RotatedBox(
+                                            //     quarterTurns: (3).toInt(),
+                                            //     child: Icon(
+                                            //       Icons.arrow_back_ios_rounded,
+                                            //       size: 14,
                                             //     ),
-                                            //     options: ["a", "b", "c", "d"],
-                                            //     selectedValues: ["a"],
-                                            //     onChanged: (List value) {
-                                            //       //   value = selectedCheckBoxValue;
-                                            //       //print(value);
-                                            //     },
-                                            //     whenEmpty: 'Select Location',
                                             //   ),
-                                            : DropdownButton<Branch>(
-                                                isExpanded: true,
-                                                value: (ctrl.SelectedBranch!
-                                                        .isNotEmpty)
-                                                    ? (ctrl.SelectedBranch
-                                                            .isEmpty)
-                                                        ? null
-                                                        : ctrl.SelectedBranch!
-                                                            .first
-                                                    : null,
-                                                isDense: true,
-                                                icon: RotatedBox(
-                                                  quarterTurns: (3).toInt(),
-                                                  child: Icon(
-                                                    Icons.arrow_back_ios_new,
-                                                    size: 14,
-                                                  ),
-                                                ),
-                                                underline: Container(),
-                                                onChanged: (value) {
-                                                  ctrl.SelectedBranch = [
-                                                    value!
-                                                  ];
-                                                  ctrl.update();
-                                                  ctrl.loadLastEntry();
-                                                },
-                                                items: ctrl.branchModel!.branch!
-                                                    .map((var data) {
-                                                  return new DropdownMenuItem<
-                                                      Branch>(
-                                                    value: data,
-                                                    child: tx500(
-                                                        StringtoFormate(
-                                                            data.branch!),
-                                                        size: 14,
-                                                        color: Colors.black),
-                                                  );
-                                                }).toList())),
+                                            // ),
+
+                                            // decoration: InputDecoration(
+                                            //     enabledBorder: OutlineInputBorder(
+                                            //         borderSide: BorderSide(
+                                            //             color:
+                                            //                 Color(0xff323030),
+                                            //             width: .6),
+                                            //         gapPadding: 0,
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(
+                                            //                 10)),
+                                            //     focusedBorder: OutlineInputBorder(
+                                            //         borderSide: BorderSide(
+                                            //             color:
+                                            //                 Color(0xff323030),
+                                            //             width: .6),
+                                            //         gapPadding: 0,
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(
+                                            //                 10)),
+                                            //     disabledBorder: OutlineInputBorder(
+                                            //         borderSide: BorderSide(
+                                            //             color:
+                                            //                 Color(0xff323030),
+                                            //             width: .6),
+                                            //         gapPadding: 0,
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(
+                                            //                 10)),
+                                            //     border: OutlineInputBorder(
+                                            //         borderSide: BorderSide(
+                                            //             color: Color(0xff323030),
+                                            //             width: .6),
+                                            //         gapPadding: 0,
+                                            //         borderRadius: BorderRadius.circular(10))),
+                                            // childBuilder: (selectedValues) {
+                                            //   if (selectedValues.length == 1) {
+                                            //     return Padding(
+                                            //       padding: EdgeInsets.symmetric(
+                                            //           horizontal: 10),
+                                            //       child: tx500(
+                                            //           StringtoFormate(
+                                            //               selectedValues.first
+                                            //                   .toString()),
+                                            //           size: 14,
+                                            //           color: Colors.black),
+                                            //     );
+                                            //   } else if (selectedValues.length >
+                                            //       1) {
+                                            //     return Padding(
+                                            //       padding: EdgeInsets.symmetric(
+                                            //           horizontal: 10),
+                                            //       child: tx500(
+                                            //           StringtoFormate(
+                                            //               selectedValues
+                                            //                       .length
+                                            //                       .toString() +
+                                            //                   " Selected"
+                                            //                       .toString()),
+                                            //           size: 14,
+                                            //           color: Colors.black),
+                                            //     );
+                                            //   } else {
+                                            //     return Padding(
+                                            //       padding: EdgeInsets.symmetric(
+                                            //           horizontal: 10),
+                                            //       child: tx500(
+                                            //           StringtoFormate(
+                                            //               "Select Branch"),
+                                            //           size: 14,
+                                            //           color: Colors.black),
+                                            //     );
+                                            //   }
+                                            // },
+
+                                            list: ctrl.BranchList,
+                                            initiallySelected: ctrl.BS,
+                                            listChanger: ctrl.listChanger,
+                                            onChange: (value) {
+                                              //   ctrl.SelectedBranch = value;
+
+                                              ctrl.BS = value
+                                                  .map((e) => e.toString())
+                                                  .toList();
+                                              ctrl.formBranchList();
+
+                                              ctrl.update();
+
+                                              ctrl.formBranchList();
+                                              ctrl.update();
+                                            },
+                                          )),
+                                    ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  // InkWell(
+                                  //   onTap: () {
+                                  //     //ctrl.controller.clearAllSelection();
+                                  //     ctrl.SelectedBranch =
+                                  //         ctrl.branchModel!.branch!;
+                                  //     ctrl.update();
+                                  //   },
+                                  //   child: Container(
+                                  //     width: 10.4.w,
+                                  //     height: 10.4.w,
+                                  //     decoration: BoxDecoration(
+                                  //         borderRadius:
+                                  //             BorderRadius.circular(8),
+                                  //         color: Color(0xff767680)
+                                  //             .withOpacity(.12)),
+                                  //     child: Icon(Icons.all_inbox),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -355,7 +418,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                                       color: Colors.black),
                                   InkWell(
                                     onTap: () async {
-                                      ////print("worling");
+                                      //////print("worling");
                                       var result =
                                           await showCalendarDatePicker2Dialog(
                                         context: context,
@@ -368,7 +431,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                                                 currentDate: DateTime.now()),
                                         value: [ctrl.startData, ctrl.endDate],
                                       );
-                                      ////print(result);
+                                      //////print(result);
                                       if (result != null) {
                                         if (result.length > 1) {
                                           setState(() {
@@ -376,7 +439,7 @@ class _ScalesHomeState extends State<ScalesHome> {
                                             ctrl.endDate = result[1]!;
                                             ctrl.LoadSaleData();
                                           });
-                                          ////print(CurrentBranchID);
+                                          //////print(CurrentBranchID);
                                         } else {
                                           setState(() {
                                             ctrl.startData = result[0]!;

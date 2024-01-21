@@ -22,6 +22,7 @@ String login = "";
 int isok = 0;
 String userid = "";
 String token = "";
+String Serviceversion = "";
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -33,6 +34,8 @@ void main() async {
 
   SharedPreferences preferences = await SharedPreferences.getInstance();
   login = preferences.getString("LOGIN").toString();
+  Serviceversion =
+      preferences.getString("SERVICE").toString().replaceAll("null", "1.0.0.0");
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationSettings settings = await messaging.requestPermission(
@@ -50,29 +53,31 @@ void main() async {
     badge: true,
     sound: true,
   );
-  if (login == "IN") {
-    token = preferences.getString("TOKEN").toString();
-    userid = preferences.getString("USERID").toString();
-    final Response = await http.post(
-        Uri.parse("$baseurl/v1/profile/getuserprofile"),
-        body: json.encode({"userID": "$userid"}),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token'
-        });
+  try {
+    if (login == "IN") {
+      token = preferences.getString("TOKEN").toString();
+      userid = preferences.getString("USERID").toString();
+      final Response = await http.post(
+          Uri.parse("$baseurl/v1/profile/getuserprofile"),
+          body: json.encode({"userID": "$userid"}),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          });
 
-    if (Response.statusCode == 200) {
-      var js = json.decode(Response.body);
-      UserData = js["data"][0];
-      ////print(UserData);
-      isok = 1;
-    } else if (Response.statusCode == 401) {
+      if (Response.statusCode == 200) {
+        var js = json.decode(Response.body);
+        UserData = js["data"][0];
+        //////print(UserData);
+        isok = 1;
+      } else if (Response.statusCode == 401) {
+        isok = 2;
+        Fluttertoast.showToast(msg: "Reauthenticate please");
+      }
+    } else if (login == "SKIP") {
       isok = 2;
-      Fluttertoast.showToast(msg: "Reauthenticate please");
     }
-  } else if (login == "SKIP") {
-    isok = 2;
-  }
+  } catch (e) {}
   runApp(seematti());
 }
 

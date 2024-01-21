@@ -59,7 +59,7 @@ class _settingViewState extends State<settingView> {
         headers: {
           "Authorization": "Bearer $token",
         });
-    // ////print(response.body);
+    // //////print(response.body);
 
     if (response.statusCode == 200) {
       var js = json.decode(response.body);
@@ -76,10 +76,10 @@ class _settingViewState extends State<settingView> {
     final res = await get(Uri.parse("$baseurl/v1/common/getversion"), headers: {
       "Authorization": "Bearer $token",
     });
-    ////print(res.body);
+    //////print(res.body);
     if (res.statusCode == 200) {
       var js = json.decode(res.body);
-      ////print(js);
+      //////print(js);
       setState(() {
         Version =
             js["data"]["versionNo"].toString().replaceAll("-SNAPSHOT", "");
@@ -132,7 +132,7 @@ class _settingViewState extends State<settingView> {
                             currentTitle = "Settings";
                           });
                         } else {
-                          ////print("////print working");
+                          //////print("//////print working");
                           widget.notifier.value++;
                           widget.notifier.notifyListeners();
                         }
@@ -417,7 +417,7 @@ class _settingViewState extends State<settingView> {
 
                       if (response.statusCode == 200) {
                         var js = json.decode(response.body);
-                        ////print(response.body);
+                        //////print(response.body);
                         if (js["success"] != null && js["success"] == true) {
                           setState(() {
                             isloading = false;

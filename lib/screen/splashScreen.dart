@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // String log = pref.getString("LOGIN").toString();
     Future.delayed(Duration(seconds: 2));
     // Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => HomeMain()));
-    // //no////print(log);
+    // //no//////print(log);
     // if (log == "null") {
     //   ScreenChanger(context, WelcomeScreen());
     // } else {}
@@ -50,6 +50,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ctrl.firstLaunch = false;
+    ctrl.LoadCompany();
     return Scaffold(
       body: Container(
         child: Stack(
@@ -112,7 +114,8 @@ class _SplashScreenState extends State<SplashScreen> {
                   children: [
                     tx400("App ver : 1.0.0", color: Colors.white, size: 13),
                     height(4),
-                    tx400("Service ver : 1.0.0", color: Colors.white, size: 13),
+                    tx400("Service ver : $Serviceversion",
+                        color: Colors.white, size: 13),
                     height(20),
                     SizedBox(
                         width: 100,

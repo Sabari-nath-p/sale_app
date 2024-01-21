@@ -3,7 +3,7 @@ StringtoFormate(String s) {
 }
 
 String ToFixed(var value, {int decimal = 2}) {
-//  //print(value);
+//  ////print(value);
   if (value != null) {
     double val = double.parse(value.toString()).toDouble();
 

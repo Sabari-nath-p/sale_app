@@ -22,7 +22,7 @@ class _SalesDetialCardState extends State<SalesDetialCard> {
     double precentage = 0;
     precentage = (widget.data.netSalePerc! * .87.w);
     return AnimatedContainer(
-      height: (isExpanded) ? 25.8.h : 15.29.h,
+      height: (isExpanded) ? 25.8.h : 16.29.h,
       curve: Curves.easeIn,
       duration: const Duration(milliseconds: 100),
       margin: EdgeInsets.symmetric(horizontal: 4.2.w, vertical: .7.h),

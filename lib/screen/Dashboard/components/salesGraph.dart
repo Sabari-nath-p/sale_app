@@ -5,10 +5,10 @@ import 'package:http/http.dart';
 import 'package:seematti/MVC/Controller.dart';
 import 'package:seematti/screen/Dashboard/views/SalesHome.dart';
 
-import '../screen/Dashboard/HomeMain.dart';
-import '../utiles/colors.dart';
-import '../utiles/functionSupporter.dart';
-import '../utiles/textstyles.dart';
+import '../HomeMain.dart';
+import '../../../utiles/colors.dart';
+import '../../../utiles/functionSupporter.dart';
+import '../../../utiles/textstyles.dart';
 
 class SalesGraph extends StatefulWidget {
   SalesGraph({
@@ -31,7 +31,7 @@ class _SalesGraphState extends State<SalesGraph> {
 
     // loadNotifier();
 
-    //no////print(highSale);
+    //no//////print(highSale);
   }
 
   // @override
@@ -39,13 +39,13 @@ class _SalesGraphState extends State<SalesGraph> {
   //   // TODO: implement didChangeDependencies
   //   super.didChangeDependencies();
   //   // loadData();
-  //   //print("working");
+  //   ////print("working");
   // }
 
   bool checkDecimal(double value) {
     String temp = value.toString();
     List tm = temp.split(".");
-    //no////print(tm[1]);
+    //no//////print(tm[1]);
     if (tm[1] == '5') {
       return false;
     } else
@@ -53,6 +53,18 @@ class _SalesGraphState extends State<SalesGraph> {
   }
 
   Controller ctrl = Get.put(Controller());
+
+  double findHigh() {
+    int start = 0;
+    for (var data in ctrl.SalesData!.data!.salesDetails!) {
+      if (data.netSaleAmount! > start) {
+        start = data.netSaleAmount!;
+      }
+    }
+
+    return start.toDouble() + start / 10;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -66,9 +78,10 @@ class _SalesGraphState extends State<SalesGraph> {
                     10),
         child: LineChart(LineChartData(
             minX: 0,
+
             // maxX: widget.salesGraphData.length.toDouble(),
-            minY: 0,
-            //  maxY: highSale,
+
+            maxY: findHigh(),
             // maxX: 5,
             titlesData: FlTitlesData(
                 //  show: false,

@@ -353,19 +353,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                       "AppID": "S01",
                                     });
 
-                                //no////print(Response.body);
-                                //no////print(Response.statusCode);
-                                ////print("working");
+                                //no//////print(Response.body);
+                                //no//////print(Response.statusCode);
+                                //////print("working");
 
-                                ////print(Response.body);
+                                //print(Response.body);
                                 if (Response.statusCode == 200) {
                                   var res = json.decode(Response.body);
 
                                   if (res["success"] &&
                                       res["success"] != null) {
-                                    //no////print(res);
-                                    ////print(Response.body);
-                                    ////print(Response.body);
+                                    //no//////print(res);
+                                    //print(Response.body);
+                                    //////print(Response.body);
                                     SharedPreferences pref =
                                         await SharedPreferences.getInstance();
                                     pref.setString("USER", Response.body);
@@ -383,7 +383,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           'Content-Type': 'application/json',
                                           'Authorization': 'Bearer $token'
                                         });
-                                    ////print(pp.body);
+                                    //////print(pp.body);
                                     if (pp.statusCode == 200) {
                                       var js = json.decode(pp.body);
                                       UserData = js["data"][0];
@@ -408,7 +408,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Navigator.pop(context);
                                     ScreenChanger(context, SplashScreen());
                                   } else {
-                                    //no////print("working");
+                                    //no//////print("working");
                                     setState(() {
                                       isLoading = false;
                                     });
@@ -454,7 +454,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         height(15),
                         Center(
-                            child: tx400("Ver. - 1.00.1.00",
+                            child: tx400("Ver. - $Serviceversion",
                                 size: 14,
                                 textAlign: TextAlign.center,
                                 color: Colors.black)),
